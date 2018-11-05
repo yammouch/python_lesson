@@ -18,17 +18,27 @@ def main():
     creds = tools.run_flow(flow, store)
   service = build('sheets', 'v4', http=creds.authorize(Http()))
 
-  values = [ [ 'hoge' ] ]
-  body = { 'values' : values }
+  title = 'title_hoge'
+  requests = []
+  requests.append({
+    'updateSpreadsheetProperties': {
+      'properties': {
+        'title': title
+      },
+      'fields': 'title'
+    }
+  })
+  body = {
+    'requests': requests
+  }
 
   # Call the Sheets API
   SPREADSHEET_ID = '1dbaI85LP1wxyuTcN2SBk3hkD-OO9-PNyjfBb0-ARnVY'
   RANGE_NAME = 'Sheet1!A2:E'
   value_input_option = 'USER_ENTERED'
-  result = service.spreadsheets().values().update(
-   spreadsheetId=SPREADSHEET_ID, range=RANGE_NAME,
-   valueInputOption=value_input_option, body=body).execute()
-  print('{0} cells updated.'.format(result.get('updatedCells')));
+  response = service.spreadsheets().batchUpdate(
+   spreadsheetId=SPREADSHEET_ID, body=body).execute()
+  print(response)
 
 if __name__ == '__main__':
   main()
