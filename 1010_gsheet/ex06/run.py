@@ -21,11 +21,27 @@ def main():
   title = 'title_hoge'
   requests = []
   requests.append({
-    'updateSpreadsheetProperties': {
-      'properties': {
-        'title': title
+    'updateCells': {
+      'rows': {
+        'values': {
+          'userEnteredFormat': {
+            'backgroundColor': {
+              'red'  : 0,
+              'green': 0,
+              'blue' : 0,
+              'alpha': 0
+            }
+          }
+        }
       },
-      'fields': 'title'
+      'fields': '*',
+      'range': {
+        'sheetId'          : 0,
+        'startRowIndex'    : 1,
+        'endRowIndex'      : 2,
+        'startColumnIndex' : 0,
+        'endColumnIndex'   : 1
+      }  
     }
   })
   body = {
