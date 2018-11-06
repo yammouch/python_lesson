@@ -60,7 +60,7 @@ def make_req(cells):
           }
         }
       },
-      'fields': '*',
+      'fields': 'userEnteredFormat.backgroundColor',
       'range': {
         'sheetId'          : 0,
         'startRowIndex'    : cells[0],
