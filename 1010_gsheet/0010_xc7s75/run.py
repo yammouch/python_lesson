@@ -12,12 +12,7 @@ def is_reserved(cells):
 def parse_line(str):
   cells = str.split()
   m = re_pin_pos.match(cells[0])
-  ret = []
-  ret.append(row_dict[m[1]])
-  ret.append(int(m[2])-1)
-  ret.append(cells[1])
-  ret.append(is_reserved(cells))
-  return ret
+  return [row_dict[m[1]], int(m[2])-1, is_reserved(cells), cells[1]]
 
 def read_file():
   f = open('xc7s75fgga676pkg.txt', 'r')
@@ -31,7 +26,7 @@ def read_file():
 
 def main():
   r = read_file()
-  for i in range(50):
-    print(r[i])
+  for i in r:
+    print(i)
 
 main()
