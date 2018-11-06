@@ -1,4 +1,8 @@
+from __future__ import print_function
 import re
+from googleapiclient.discovery import build
+from httplib2 import Http
+from oauth2client import file, client, tools
 
 re_pin_pos = re.compile('([A-Z]+)([0-9]+)')
 row_names = 'A B C D E F G H J K L M N P R T U V W Y AA AB AC AD AE AF'.split()
@@ -50,10 +54,26 @@ def make_req(cells):
     }
   }
 
+def send_req(requests):
+  SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
+  store = file.Storage('token.json')
+  creds = store.get()
+  if not creds or creds.invalid:
+    flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
+    creds = tools.run_flow(flow, store)
+  service = build('sheets', 'v4', http=creds.authorize(Http()))
+
+  # Call the Sheets API
+  SPREADSHEET_ID = '1dbaI85LP1wxyuTcN2SBk3hkD-OO9-PNyjfBb0-ARnVY'
+  RANGE_NAME = 'Sheet1!A2:E'
+  value_input_option = 'USER_ENTERED'
+  response = service.spreadsheets().batchUpdate(
+   spreadsheetId=SPREADSHEET_ID, body={'requests': requests}).execute()
+  print(response)
+
 def main():
   table = read_file()
   requests = [make_req(x) for x in table if x[2]]
-  for i in range(3):
-    print(requests[i])
+  send_req(requests)
 
 main()
