@@ -13,10 +13,27 @@ for i in range(len(row_names)):
 def is_reserved(cells):
   return cells[1].startswith('VCC') or cells[3] == 'NA' or cells[3] == '0'
 
+color_table = {
+ '13': [254, 190,  37],
+ '14': [192, 215,  47],
+ '15': [143,  84, 162],
+ '16': [ 75, 187, 235],
+ '33': [ 96, 191, 133],
+ '34': [217, 139,  62],
+ '35': [217,  64, 140],
+ '36': [141, 140, 196]
+}
+
 def parse_line(str):
   cells = str.split()
   m = re_pin_pos.match(cells[0])
-  return [row_dict[m[1]], int(m[2])-1, is_reserved(cells), cells[1]]
+  if is_reserved(cells):
+    color = [0, 0, 0]
+  elif 'MRCC' in cells[1] or 'SRCC' in cells[1]:
+    color = [x/255.0 for x in color_table[cells[3]]]
+  else:
+    color = [1.0 - (1.0-x/255.0)/2.0 for x in color_table[cells[3]]]
+  return [row_dict[m[1]], int(m[2])-1, color, cells[1]]
 
 def read_file():
   f = open('xc7s75fgga676pkg.txt', 'r')
@@ -35,9 +52,9 @@ def make_req(cells):
         'values': {
           'userEnteredFormat': {
             'backgroundColor': {
-              'red'  : 0,
-              'green': 0,
-              'blue' : 0,
+              'red'  : cells[2][0],
+              'green': cells[2][1],
+              'blue' : cells[2][2],
               'alpha': 0
             }
           }
@@ -65,15 +82,13 @@ def send_req(requests):
 
   # Call the Sheets API
   SPREADSHEET_ID = '1dbaI85LP1wxyuTcN2SBk3hkD-OO9-PNyjfBb0-ARnVY'
-  RANGE_NAME = 'Sheet1!A2:E'
-  value_input_option = 'USER_ENTERED'
   response = service.spreadsheets().batchUpdate(
    spreadsheetId=SPREADSHEET_ID, body={'requests': requests}).execute()
   print(response)
 
 def main():
   table = read_file()
-  requests = [make_req(x) for x in table if x[2]]
+  requests = [make_req(x) for x in table]
   send_req(requests)
 
 main()
