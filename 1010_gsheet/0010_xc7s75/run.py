@@ -24,9 +24,36 @@ def read_file():
   parsed = [parse_line(l) for l in lines]
   return parsed
 
+def make_req(cells):
+  return {
+    'updateCells': {
+      'rows': {
+        'values': {
+          'userEnteredFormat': {
+            'backgroundColor': {
+              'red'  : 0,
+              'green': 0,
+              'blue' : 0,
+              'alpha': 0
+            }
+          }
+        }
+      },
+      'fields': '*',
+      'range': {
+        'sheetId'          : 0,
+        'startRowIndex'    : cells[0],
+        'endRowIndex'      : cells[0]+1,
+        'startColumnIndex' : cells[1],
+        'endColumnIndex'   : cells[1]+1
+      }  
+    }
+  }
+
 def main():
-  r = read_file()
-  for i in r:
-    print(i)
+  table = read_file()
+  requests = [make_req(x) for x in table if x[2]]
+  for i in range(3):
+    print(requests[i])
 
 main()
