@@ -10,9 +10,10 @@ def main():
 
   price   = [ [ 0, value_init         ] ]
   balance = [ [ 0, value_init - atama ] ]
+  paid    = [ [ 0, atama              ] ]
 
   i = 1
-  while 0 < balance[-1][1]:
+  while 0 < balance[-1][1] and i <= 50:
     price.append(
      [ i
      , value_min if price[-1][1] <= value_min + pay_year else
@@ -25,15 +26,15 @@ def main():
      [ i
      , 0 if balance[-1][1] == 0 else
        balance[-1][1] * (1 + 0.01*interest) ] )
+    paid.append([i, paid[-1][1] + pay_year])
     i += 1
 
   print(price)
   print([x[0] for x in price])
 
-  plt.plot([x[0] for x in price  ], [x[1] for x in price  ])
-  plt.plot([x[0] for x in balance], [x[1] for x in balance])
-  plt.show()
+  for curve in [price, balance, paid]:
+    plt.plot([x[0] for x in curve], [x[1] for x in curve])
 
-  #paid = []
+  plt.show()
 
 main()
