@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator
 
 def main():
   atama      = 500e4
@@ -38,6 +39,12 @@ def main():
     plt.plot([x[0] for x in curve], [x[1] / 100e4 for x in curve])
   for curve in [rent]:
     plt.plot([x[0] for x in curve], [x[1] /   1e4 for x in curve])
+  #plt.xaxis.set_minor_locator(MultipleLocator(5))
+  #plt.yaxis.set_minor_locator(MultipleLocator(5))
+  #plt.locator_params(nbins=4)
+  plt.minorticks_on()
+  plt.grid(which='major', color='black', linestyle='-')
+  plt.grid(which='minor', color='black', linestyle='--')
 
   plt.show()
 
