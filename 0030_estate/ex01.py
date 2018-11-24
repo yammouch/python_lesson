@@ -1,23 +1,24 @@
 import matplotlib.pyplot as plt
 
 def main():
-  atama = 500e4
-  permonth = 10e4
+  atama      = 500e4
   value_init = 3000e4
-  value_min = 500e4
-  interest = 2.5 # unit : %
-  pay_year = 200e4
+  value_min  = 0
+  interest   = 1.3 # unit : %
+  pay_year   = 120e4
+  sell_cost  = 100e4
 
-  price   = [ [ 0, value_init         ] ]
+  value   = [ [ 0, value_init         ] ]
   balance = [ [ 0, value_init - atama ] ]
   paid    = [ [ 0, atama              ] ]
+  rent    = [                           ]
 
   i = 1
   while 0 < balance[-1][1] and i <= 50:
-    price.append(
+    value.append(
      [ i
-     , value_min if price[-1][1] <= value_min + pay_year else
-       price[-1][1] - pay_year ] )
+     , value_min if value[-1][1] <= value_min + pay_year else
+       value[-1][1] - pay_year ] )
     balance.append(
      [ i
      , 0 if balance[-1][1] <= pay_year else
@@ -27,13 +28,16 @@ def main():
      , 0 if balance[-1][1] == 0 else
        balance[-1][1] * (1 + 0.01*interest) ] )
     paid.append([i, paid[-1][1] + pay_year])
+    rent.append(
+     [ i
+     ,   (paid[-1][1] - value[-1][1] + balance[-1][1] + sell_cost)
+       / (i * 12) ] )
     i += 1
 
-  print(price)
-  print([x[0] for x in price])
-
-  for curve in [price, balance, paid]:
-    plt.plot([x[0] for x in curve], [x[1] for x in curve])
+  for curve in [value, balance, paid]:
+    plt.plot([x[0] for x in curve], [x[1] / 100e4 for x in curve])
+  for curve in [rent]:
+    plt.plot([x[0] for x in curve], [x[1] /   1e4 for x in curve])
 
   plt.show()
 
