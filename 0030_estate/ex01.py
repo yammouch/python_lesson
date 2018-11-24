@@ -8,10 +8,11 @@ def main():
   interest = 2.5 # unit : %
   pay_year = 200e4
 
-  price   = [ [0, value_init         ] ]
-  balance = [ [0, value_init - atama ] ]
+  price   = [ [ 0, value_init         ] ]
+  balance = [ [ 0, value_init - atama ] ]
 
-  for i in range(1, 30):
+  i = 1
+  while 0 < balance[-1][1]:
     price.append(
      [ i
      , value_min if price[-1][1] <= value_min + pay_year else
@@ -24,6 +25,7 @@ def main():
      [ i
      , 0 if balance[-1][1] == 0 else
        balance[-1][1] * (1 + 0.01*interest) ] )
+    i += 1
 
   print(price)
   print([x[0] for x in price])
