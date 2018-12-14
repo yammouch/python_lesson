@@ -17,18 +17,21 @@ class MLP(chainer.Chain):
     with self.init_scope():
       # the size of the inputs to each layer will be inferred
       self.l1 = L.Linear(None, n_units)  # n_in -> n_units
-      self.l2 = L.Linear(None, n_units)  # n_units -> n_units
-      self.l3 = L.Linear(None, n_out)  # n_units -> n_out
+      #self.l2 = L.Linear(None, n_units)  # n_units -> n_units
+      #self.l3 = L.Linear(None, n_out)  # n_units -> n_out
+      #self.l2 = L.Linear(None, n_out)  # n_in -> n_units
 
   def forward(self, x):
-    h1 = F.relu(self.l1(x))
-    h2 = F.relu(self.l2(h1))
-    return self.l3(h2)
+    #h1 = F.relu(self.l1(x))
+    #h2 = F.relu(self.l2(h1))
+    #return self.l3(h2)
+    #return self.l2(h1)
+    return F.relu(self.l1(x))
 
 
 def main():
   batchsize = 100
-  model = L.Classifier(MLP(100, 10))
+  model = L.Classifier(MLP(10, 10))
   optimizer = chainer.optimizers.Adam()
   optimizer.setup(model)
   src = range(10)
@@ -41,7 +44,7 @@ def main():
                                                repeat=False, shuffle=False)
   updater = training.updaters.StandardUpdater(
     train_iter, optimizer, device=-1)
-  trainer = training.Trainer(updater, (1, 'epoch'), out='tr020_result')
+  trainer = training.Trainer(updater, (1, 'epoch'), out='tr030_result')
   trainer.extend(extensions.Evaluator(test_iter, model, device=-1))
   trainer.extend(extensions.dump_graph('main/loss'))
   trainer.extend(extensions.snapshot(), trigger=(1, 'epoch'))
