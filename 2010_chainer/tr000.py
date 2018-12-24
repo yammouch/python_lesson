@@ -36,10 +36,11 @@ def main():
                                                repeat=False, shuffle=False)
   updater = training.updaters.StandardUpdater(
     train_iter, optimizer, device=-1)
-  trainer = training.Trainer(updater, (1, 'epoch'), out='result')
+  trainer = training.Trainer(updater, (1, 'epoch'), out='tr000_result')
   trainer.extend(extensions.Evaluator(test_iter, model, device=-1))
   trainer.extend(extensions.dump_graph('main/loss'))
   trainer.extend(extensions.snapshot(), trigger=(1, 'epoch'))
+  trainer.extend(extensions.snapshot_object(model.predictor, filename='model_epoch-{.updater.epoch}'))
   trainer.extend(extensions.LogReport())
   trainer.extend(extensions.PrintReport(
     ['epoch', 'main/loss', 'validation/main/loss',
