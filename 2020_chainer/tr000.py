@@ -33,7 +33,8 @@ class MLP(Chain):
         h2 = F.relu(self.l2(h1))
         return self.l3(h2)
 
-gpu_id = 0  # Set to -1 if you use CPU
+#gpu_id = 0  # Set to -1 if you use CPU
+gpu_id = -1  # Set to -1 if you use CPU
 
 model = MLP()
 if gpu_id >= 0:
