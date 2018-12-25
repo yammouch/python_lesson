@@ -38,6 +38,11 @@ serializers.load_npz('mnist_result/model_epoch-10', model)
 x, t = test[0]
 print('label:', t)
 
+print(x)
+print(type(x))
+print(x[None, ...])
+print(type(x[None, ...]))
+
 y = model(x[None, ...])
 
 print('predicted_label:', y.data.argmax(axis=1)[0])
