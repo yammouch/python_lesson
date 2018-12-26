@@ -33,6 +33,8 @@ def main():
   train, test = chainer.datasets.get_mnist()
   train_iter = chainer.iterators.SerialIterator(train, batchsize)
   d = next(train_iter)
+  print(type(train))
+  print(type(train[0]))
   print(type(d))
   print(len(d))
   print(d[0])
