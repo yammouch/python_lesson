@@ -37,6 +37,7 @@ def main():
     ars[i][i] = 1.0
   train = chainer.datasets.TupleDataset(ars, src)
   train_iter = chainer.iterators.SerialIterator(train, batchsize)
+  #print(next(train_iter))
   test_iter = chainer.iterators.SerialIterator(train, batchsize,
                                                repeat=False, shuffle=False)
   updater = training.updaters.StandardUpdater(
