@@ -95,6 +95,10 @@ x, t = test[0]
 #plt.show()
 print('input:', x)
 print('label:', t)
+print('model.l1.W:', model.l1.W)
+print('model.l1.b:', model.l1.b)
+print('model.l2.W:', model.l2.W)
+print('model.l2.b:', model.l2.b)
 
 y = model(x[None, ...])
 
