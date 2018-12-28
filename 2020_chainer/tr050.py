@@ -93,4 +93,5 @@ for i in range(maxN):
 
   y = model(x[None, ...])
 
+  print('output:', y.data)
   print('predicted_label:', y.data.argmax(axis=1)[0])
