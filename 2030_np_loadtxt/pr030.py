@@ -20,3 +20,6 @@ acc += r*1000
 a = a // 5
 
 print(acc)
+print(acc.reshape(5, 4, 3, 2))
+#print(np.swapaxes(acc.reshape(5, 4, 3, 2), 1, 3))
+print(np.moveaxis(acc.reshape(5, 4, 3, 2), 3, 1))
