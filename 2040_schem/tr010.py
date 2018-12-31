@@ -19,8 +19,8 @@ dataset = [np.loadtxt("../../jocl_lesson/0270_sasimi/{}.dat".format(x),
                       dtype=np.float32)
            for x in ["train_in", "train_out", "test_in", "test_out"]]
 
-train = chainer.datasets.TupleDataset(dataset[0], dataset[1])
-test = chainer.datasets.TupleDataset(dataset[2], dataset[3])
+train = chainer.datasets.TupleDataset(dataset[0], dataset[1].astype(np.int8))
+test = chainer.datasets.TupleDataset(dataset[2], dataset[3].astype(np.int8))
 
 train_iter = iterators.SerialIterator(train, batchsize)
 test_iter = iterators.SerialIterator(test, batchsize, False, False)
@@ -50,6 +50,7 @@ max_epoch = 3
 # Wrap your model by Classifier and include the process of loss calculation within your model.
 # Since we do not specify a loss function here, the default 'softmax_cross_entropy' is used.
 model = L.Classifier(model, lossfun=F.sigmoid_cross_entropy)
+model.compute_accuracy = False
 
 # selection of your optimizing method
 #optimizer = optimizers.MomentumSGD()
