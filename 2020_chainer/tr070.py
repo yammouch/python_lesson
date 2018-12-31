@@ -1,4 +1,3 @@
-# This program does not run.
 import numpy as np
 import chainer
 from chainer import backend
@@ -62,6 +61,7 @@ max_epoch = 3
 # Since we do not specify a loss function here, the default 'softmax_cross_entropy' is used.
 #model = L.Classifier(model)
 model = L.Classifier(model, lossfun=F.sigmoid_cross_entropy)
+model.compute_accuracy = False
 
 # selection of your optimizing method
 #optimizer = optimizers.MomentumSGD()
