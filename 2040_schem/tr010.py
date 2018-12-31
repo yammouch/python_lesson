@@ -10,29 +10,24 @@ import chainer.functions as F
 import chainer.links as L
 from chainer.training import extensions
 
-#np.random.seed(22)
 np.random.seed(1)
 
-maxN = 3
-midN = 3
+batchsize = 128
+midN = 100
 
-#batchsize = 128
-batchsize = maxN
-#batchsize = 2
+dataset = [np.loadtxt("../../jocl_lesson/0270_sasimi/{}.dat".format(x),
+                      dtype=np.float32)
+           for x in ["train_in", "train_out", "test_in", "test_out"]]
 
-src = range(maxN)
-ars = [np.zeros(maxN, dtype=np.float32) for _ in src]
-for i in src:
-  ars[i][i] = 1.0
-train = chainer.datasets.TupleDataset(ars, src)
-test = chainer.datasets.TupleDataset(ars, src)
+train = chainer.datasets.TupleDataset(dataset[0], dataset[1])
+test = chainer.datasets.TupleDataset(dataset[2], dataset[3])
 
 train_iter = iterators.SerialIterator(train, batchsize)
 test_iter = iterators.SerialIterator(test, batchsize, False, False)
 
 class MLP(Chain):
 
-    def __init__(self, n_mid_units=100, n_out=10):
+    def __init__(self, n_mid_units=100, n_out=32):
         print('n_mid_units={}'.format(n_mid_units))
         print('n_out={}'.format(n_out))
         super(MLP, self).__init__()
@@ -41,12 +36,12 @@ class MLP(Chain):
 
     def forward(self, x):
         return F.relu(self.l1(x))
-        return self.l2(h1)
+        #return self.l2(h1)
 
 #gpu_id = 0  # Set to -1 if you use CPU
 gpu_id = -1  # Set to -1 if you use CPU
 
-model = MLP(midN, maxN)
+model = MLP(midN, 32)
 if gpu_id >= 0:
     model.to_gpu(gpu_id)
 
@@ -54,7 +49,7 @@ max_epoch = 3
 
 # Wrap your model by Classifier and include the process of loss calculation within your model.
 # Since we do not specify a loss function here, the default 'softmax_cross_entropy' is used.
-model = L.Classifier(model)
+model = L.Classifier(model, lossfun=F.sigmoid_cross_entropy)
 
 # selection of your optimizing method
 #optimizer = optimizers.MomentumSGD()
@@ -84,7 +79,7 @@ trainer.run()
 
 import matplotlib.pyplot as plt
 
-model = MLP(midN, maxN)
+model = MLP(midN, 32)
 serializers.load_npz('tr010_result/model_epoch-2', model)
 
 print('model.l1.W:', model.l1.W)
