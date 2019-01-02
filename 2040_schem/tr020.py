@@ -90,7 +90,7 @@ serializers.load_npz('tr020_result/model_epoch-2', model)
 print('model.l1.W:', model.l1.W)
 print('model.l1.b:', model.l1.b)
 
-for i in range(maxN):
+for i in range(1):
   # Show the output
   x, t = test[i]
   print('input:', x)
@@ -99,4 +99,4 @@ for i in range(maxN):
   y = model(x[None, ...])
 
   print('output:', y.data)
-  print('predicted_label:', y.data.argmax(axis=1)[0])
+  #print('predicted_label:', y.data.argmax(axis=1)[0])
