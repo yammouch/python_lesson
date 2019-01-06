@@ -42,13 +42,18 @@ test = chainer.datasets.TupleDataset(
 train_iter = iterators.SerialIterator(train, batchsize)
 test_iter = iterators.SerialIterator(test, batchsize, False, False)
 
-i, o = next(train_iter)
+pairs = next(train_iter)
 
-print(i)
-print(o)
+#print(len(pairs))
+#print(len(pairs[0]))
+#print(pairs[0])
+#print(pairs[0][0])
+#print(len(pairs[1]))
+#print(pairs[1])
 
-for line in format_field(b[0]):
-  print(line)
+for i in range(3):
+  for line in format_field(pairs[i][0]):
+    print(line)
 
 class MLP(Chain):
 
