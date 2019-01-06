@@ -21,6 +21,12 @@ def format_field(ar):
     sacc.append(line)
   return sacc
 
+def decode_command(ar):
+  return [ ar[0:2].argmax()
+         , ar[2:12].argmax()
+         , ar[12:22].argmax()
+         , ar[22:32].argmax() ]
+
 np.random.seed(1)
 
 batchsize = 128
@@ -54,10 +60,7 @@ pairs = next(train_iter)
 for i in range(3):
   for line in format_field(pairs[i][0]):
     print(line)
-  print(pairs[i][1][0:2].argmax())
-  print(pairs[i][1][2:12].argmax())
-  print(pairs[i][1][12:22].argmax())
-  print(pairs[i][1][22:32].argmax())
+  print(decode_command(pairs[i][1]))
 
 class MLP(Chain):
 
@@ -123,10 +126,14 @@ print('model.l1.b:', model.l1.b)
 for i in range(1):
   # Show the output
   x, t = test[i]
-  print('input:', x)
-  print('label:', t)
+  print('input:')
+  for line in format_field(x):
+    print(line)
+  print('label:')
+  print(decode_command(t))
 
   y = model(x[None, ...])
 
   print('output:', y.data)
+  print(decode_command(y.data[0]))
   #print('predicted_label:', y.data.argmax(axis=1)[0])
