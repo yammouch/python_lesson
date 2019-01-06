@@ -54,6 +54,10 @@ pairs = next(train_iter)
 for i in range(3):
   for line in format_field(pairs[i][0]):
     print(line)
+  print(pairs[i][1][0:2].argmax())
+  print(pairs[i][1][2:12].argmax())
+  print(pairs[i][1][12:22].argmax())
+  print(pairs[i][1][22:32].argmax())
 
 class MLP(Chain):
 
