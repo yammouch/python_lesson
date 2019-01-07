@@ -13,9 +13,12 @@ from chainer.training import extensions
 np.random.seed(1)
 
 batchsize = 2
-
 inputs = np.array([[1.0], [-1.0]], dtype=np.float32)
 outputs = np.array([[1], [0]], dtype=np.int8)
+
+#batchsize = 1
+#inputs = np.array([[1.0]], dtype=np.float32)
+#outputs = np.array([[1]], dtype=np.int8)
 
 train = chainer.datasets.TupleDataset(inputs, outputs) 
 test = chainer.datasets.TupleDataset(inputs, outputs) 
@@ -28,7 +31,8 @@ class MLP(Chain):
     def __init__(self, n_out=1):
         super(MLP, self).__init__()
         with self.init_scope():
-            self.l1 = L.Linear(None, n_out)
+            self.l1 = L.Linear(None, n_out,
+             initialW=np.array([[np.log(2)]], dtype=np.float32))
 
     def forward(self, x):
         return self.l1(x)
@@ -40,7 +44,7 @@ model = MLP()
 if gpu_id >= 0:
     model.to_gpu(gpu_id)
 
-max_epoch = 100
+max_epoch = 1
 
 # Wrap your model by Classifier and include the process of loss calculation within your model.
 # Since we do not specify a loss function here, the default 'softmax_cross_entropy' is used.
@@ -50,7 +54,7 @@ model.compute_accuracy = False
 
 # selection of your optimizing method
 #optimizer = optimizers.MomentumSGD()
-optimizer = optimizers.SGD(lr=0.1)
+optimizer = optimizers.SGD()
 
 # Give the optimizer a reference to the model
 optimizer.setup(model)
@@ -73,10 +77,15 @@ trainer.extend(extensions.dump_graph('main/loss'))
 
 trainer.run()
 
+print(model.predictor.l1.W)
+print(model.predictor.l1.W.grad)
+print(model.predictor.l1.b)
+print(model.predictor.l1.b.grad)
+
 import matplotlib.pyplot as plt
 
 model = MLP()
-serializers.load_npz('tr080_result/model_epoch-3', model)
+serializers.load_npz('tr080_result/model_epoch-1', model)
 
 print('model.l1.W:', model.l1.W)
 print('model.l1.b:', model.l1.b)
