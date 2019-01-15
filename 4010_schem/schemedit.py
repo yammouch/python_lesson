@@ -1,12 +1,8 @@
-#(ns mlp.schemedit
-# (:require [clojure.pprint])
-# (:use [clojure.set :only [difference]]))
-
-#(defn surrounding [y x]
-#  [[(- y 1)  x    0 (- y 1)  x    0]   ; up
-#   [   y     x    0 (+ y 1)  x    0]   ; down
-#   [   y  (- x 1) 1    y  (- x 1) 1]   ; left
-#   [   y     x    1    y  (+ x 1) 1]]) ; right
+def surrounding(y,  x):
+  return [ [y-1, x  , 0, y-1, x  , 0]   # up
+         , [y  , x  , 0, y+1, x  , 0]   # down
+         , [y  , x-1, 1, y  , x-1, 1]   # left
+         , [y  , x  , 1, y  , x+1, 1] ] # right
 
 #(defn net [y x d & fields]
 #  (let [idx (case d
