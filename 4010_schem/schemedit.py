@@ -28,34 +28,42 @@ def surrounding(y,  x):
 #(defn range-p [from to o] (range-2d 1 from to o))
 #(defn range-n [from to o] (range-2d 0 from to o))
 
-#(defn trace-search-dir [field traced y x d]
-#  (let [search (filter #(= (get-in field (take 3 %) 0) 1)
-#                       (surrounding y x))
-#        search (if (or (= (get-in field [y x 2] 0) 1) ; connecting dot
-#                       (<= (count (filter
-#                                   #(= (get-in field (take 3 %) 0) 1)
-#                                   search))
-#                           2)) ; surrounded by 0, 1, 2 nets
-#                 search
-#                 (filter #(= (% 2) d) search))
-#        search (filter #(= (get-in traced (take 3 %)) 0)
-#                       search)]
-#    search))
+def trace_search_dir(field, traced, y, x, d):
+  search = []
+  for s in surrounding(y, x):
+    if field[s[0]][s[1]][s[2]] == 1:
+      search.append(s)
+  n_surrounding_nets = 0
+  for s in search:
+    if field[s[0]][s[1]][s[2]] == 1:
+      n_surrounding_nets += 1
+  search_old = search; search = []
+  if not (field[y][x][2] == 1 or
+          n_surrounding_nets <= 2): # surrounded by 0, 1, 2 nets
+    for s in search_old:
+      if s[2] == d:
+        search.append(s)
+  search_old = search; search = []
+  for s in search_old:
+    if traced[s[0]][s[1]][s[2]] == 0:
+      search.append(s)
+  return search
 
-#(defn trace [field y x d]
-#  (let [cy (count field) cx (count (first field))]
-#    (loop [stack [[y x d]]
-#           traced (reduce #(vec (repeat %2 %1)) 0 [2 cx cy])]
-#      (if (empty? stack)
-#        traced
-#        (let [[py px pd] (peek stack)
-#              search (trace-search-dir field traced py px pd)]
-#          (recur (into (pop stack)
-#                       (filter (fn [[sy sx sd]]
-#                                 (and (< -1 sy cy) (< -1 sx cx)))
-#                               (map (partial drop 3) search)))
-#                 (reduce #(assoc-in %1 (take 3 %2) 1) traced search)
-#                 ))))))
+def trace(field, y, x, d):
+  cy = len(field)
+  cx = len(field[0])
+  stack = [[y, x, d]]
+  traced = [[[0] * 2] * cx] * cy
+  while stack:
+    py, px, pd = stack[-1]
+    search = trace_search_dir(field, traced, py, px, pd)
+    stack = stack[0:-1]
+    for s in search:
+      sy, sx, sd = s[3:]
+      if -1 < sy < cy and -1 < sx < cx:
+        stack.append(s[3:])
+      traced[s[0]][s[1]][s[2]] = 1
+  return traced
 
 #(defn beam [field p o]
 #  (mapv (fn [[d prog]]

@@ -10,52 +10,47 @@ else:
   print("[ER]", end="")
 print(" surrounding")
 
-#(deftest test-surrouding
-#  (is (= (smp/surrounding 4 6)
-#         [[3 6 0 3 6 0]
-#          [4 6 0 5 6 0]
-#          [4 5 1 4 5 1]
-#          [4 6 1 4 7 1]])))
+def radix(rdx, i):
+  acc = []
+  while 0 < i:
+    acc.append(i % rdx)
+    i = i // rdx
+  return acc
 
-#(defn radix [rdx i]
-#  (loop [i i acc []]
-#    (if (<= i 0)
-#      acc
-#      (recur (quot i rdx)
-#             (conj acc (rem i rdx))
-#             ))))
+def decode1(n, str):
+  acc = []
+  for c in str:
+    i = 0 if c == ' ' else int(c, 16)
+    a = radix(2, i) + [0] * n
+    acc.append(a[0:n])
+  return acc
 
-#(defn decode1 [n str]
-#  (mapv (fn [s]
-#          (->> (Integer/parseInt s 16)
-#               (radix 2)
-#               (#(concat % (repeat 0)))
-#               (take n)
-#               vec))
-#        (re-seq #"\S" str)))
-
-#(defn decode [n strs] (mapv (partial decode1 n) strs))
+def decode(n, strs):
+  return [decode1(n, str) for str in strs]
 
 #(defn mapd [d f s & ss]
 #  (if (<= d 0)
 #    (apply f s ss)
 #    (apply mapv (partial mapd (- d 1) f) s ss)))
 
-#(deftest test-trace
-#  (let [test-pattern
-#        ["0000100000" "0000000000"
-#         "0000100000" "0000000000"
-#         "0022322200" "0022222200"
-#         "0000100000" "0000000000"
-#         "0000100000" "0000000000"
-#         "0000100000" "0000000000"
-#         "0022722200" "0000000000"
-#         "0000100000" "0000000000"
-#         "0000100000" "0000000000"
-#         "0000100000" "0000000000"]
-#        [tested expected] (apply map vector (partition 2 test-pattern))]
-#    (is (= (smp/trace (decode 3 tested) 2 3 1)
-#           (decode 2 expected)))))
+test_pattern = \
+["    1     ", "          ",
+ "    1     ", "          ",
+ "  223222  ", "  222222  ",
+ "    1     ", "          ",
+ "    1     ", "          ",
+ "    1     ", "          ",
+ "  227222  ", "          ",
+ "    1     ", "          ",
+ "    1     ", "          ",
+ "    1     ", "          "]
+tested   = test_pattern[0::2]
+expected = test_pattern[1::2]
+if sce.trace(decode(3, tested), 2, 3, 1) == decode(2, expected):
+  print("[OK]", end="")
+else:
+  print("[ER]", end="")
+print(" trace")
 
 #(deftest test-beam
 #  (let [test-pattern
