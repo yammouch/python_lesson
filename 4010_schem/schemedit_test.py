@@ -17,6 +17,15 @@ def radix(rdx, i):
     i = i // rdx
   return acc
 
+def radix_inv(rdx, a):
+  acc = 0
+  for i in range(len(a)-1, -1, -1):
+    acc = acc*rdx + a[i]
+  return acc
+
+def radix2_inv(a):
+  return radix_inv(2, a)
+
 def decode1(n, str):
   acc = []
   for c in str:
@@ -28,10 +37,11 @@ def decode1(n, str):
 def decode(n, strs):
   return [decode1(n, str) for str in strs]
 
-#(defn mapd [d f s & ss]
-#  (if (<= d 0)
-#    (apply f s ss)
-#    (apply mapv (partial mapd (- d 1) f) s ss)))
+def mapd(d, f, s):
+  if d <= 0:
+    return f(s)
+  else:
+    return [mapd(d-1, f, x) for x in s]
 
 test_pattern = \
 ["    1     ", "          ",
@@ -46,7 +56,11 @@ test_pattern = \
  "    1     ", "          "]
 tested   = test_pattern[0::2]
 expected = test_pattern[1::2]
-if sce.trace(decode(3, tested), 2, 3, 1) == decode(2, expected):
+val      = sce.trace(decode(3, tested), 2, 3, 1)
+for line in mapd(2, radix2_inv, val):
+  print(line)
+#if sce.trace(decode(3, tested), 2, 3, 1) == decode(2, expected):
+if val == decode(2, expected):
   print("[OK]", end="")
 else:
   print("[ER]", end="")

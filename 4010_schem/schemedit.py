@@ -1,3 +1,19 @@
+
+def radix_inv(rdx, a):
+  acc = 0
+  for i in range(len(a)-1, -1, -1):
+    acc = acc*rdx + a[i]
+  return acc
+
+def radix2_inv(a):
+  return radix_inv(2, a)
+
+def mapd(d, f, s):
+  if d <= 0:
+    return f(s)
+  else:
+    return [mapd(d-1, f, x) for x in s]
+
 def surrounding(y,  x):
   return [ [y-1, x  , 0, y-1, x  , 0]   # up
          , [y  , x  , 0, y+1, x  , 0]   # down
@@ -37,9 +53,9 @@ def trace_search_dir(field, traced, y, x, d):
   for s in search:
     if field[s[0]][s[1]][s[2]] == 1:
       n_surrounding_nets += 1
-  search_old = search; search = []
   if not (field[y][x][2] == 1 or
           n_surrounding_nets <= 2): # surrounded by 0, 1, 2 nets
+    search_old = search; search = []
     for s in search_old:
       if s[2] == d:
         search.append(s)
@@ -53,10 +69,16 @@ def trace(field, y, x, d):
   cy = len(field)
   cx = len(field[0])
   stack = [[y, x, d]]
-  traced = [[[0] * 2] * cx] * cy
+  traced = [[[0 for i in range(2)] for i in range(cx)] for i in range(cy)]
+  for row in field:
+    print([radix2_inv(x) for x in row])
   while stack:
+    print(stack)
+    for row in traced:
+      print([radix2_inv(x) for x in row])
     py, px, pd = stack[-1]
     search = trace_search_dir(field, traced, py, px, pd)
+    print(search)
     stack = stack[0:-1]
     for s in search:
       sy, sx, sd = s[3:]
