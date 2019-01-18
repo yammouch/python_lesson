@@ -70,15 +70,9 @@ def trace(field, y, x, d):
   cx = len(field[0])
   stack = [[y, x, d]]
   traced = [[[0 for i in range(2)] for i in range(cx)] for i in range(cy)]
-  for row in field:
-    print([radix2_inv(x) for x in row])
   while stack:
-    print(stack)
-    for row in traced:
-      print([radix2_inv(x) for x in row])
     py, px, pd = stack[-1]
     search = trace_search_dir(field, traced, py, px, pd)
-    print(search)
     stack = stack[0:-1]
     for s in search:
       sy, sx, sd = s[3:]
