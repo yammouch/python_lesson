@@ -45,24 +45,12 @@ def surrounding(y,  x):
 #(defn range-n [from to o] (range-2d 0 from to o))
 
 def trace_search_dir(field, traced, y, x, d):
-  search = []
-  for s in surrounding(y, x):
-    if field[s[0]][s[1]][s[2]] == 1:
-      search.append(s)
-  n_surrounding_nets = 0
-  for s in search:
-    if field[s[0]][s[1]][s[2]] == 1:
-      n_surrounding_nets += 1
+  search = [s for s in surrounding(y, x) if field[s[0]][s[1]][s[2]] == 1]
+  n_surrounding_nets = len([s for s in search if field[s[0]][s[1]][s[2]] == 1])
   if not (field[y][x][2] == 1 or
           n_surrounding_nets <= 2): # surrounded by 0, 1, 2 nets
-    search_old = search; search = []
-    for s in search_old:
-      if s[2] == d:
-        search.append(s)
-  search_old = search; search = []
-  for s in search_old:
-    if traced[s[0]][s[1]][s[2]] == 0:
-      search.append(s)
+    search = [s for s in search if s[2] == d]
+  search = [s for s in search if traced[s[0]][s[1]][s[2]] == 0]
   return search
 
 def trace(field, y, x, d):
