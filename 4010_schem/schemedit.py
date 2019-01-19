@@ -32,7 +32,7 @@ def net(y, x, d, *fields):
       n = fld[idx[0]][idx[1]][idx[2]]
     except IndexError:
       n = 0
-    acc.append[n]
+    acc.append(n)
   return acc
 
 #(defn d-match [[y x] v & fields]
@@ -78,22 +78,21 @@ def trace(field, y, x, d):
 def beam(field, p, o):
   if o == 0:
     u = p[0]
-    while not (net(u, p[1], 0, field) == [0] or
+    while not (net(u, p[1], 'u', field) == [0] or
                net(u, p[1], 'f', field) == [1]):
       u -= 1
     d = p[0]
-    while not (net(d, p[1], 0, field) == [0] or
+    while not (net(d, p[1], 'd', field) == [0] or
                net(d, p[1], 'f', field) == [1]):
       d += 1
     return [[u, p[1]], [d, p[1]]]
-  #else if o == 1:
   elif o == 1:
     l = p[1]
-    while not (net(p[0], l, 0, field) == [0] or
+    while not (net(p[0], l, 'l', field) == [0] or
                net(p[0], l, 'f', field) == [1]):
       l -= 1
     r = p[1]
-    while not (net(p[0], r, 0, field) == [0] or
+    while not (net(p[0], r, 'r', field) == [0] or
                net(p[0], r, 'f', field) == [1]):
       r += 1
     return [[p[0], l], [p[0], r]]

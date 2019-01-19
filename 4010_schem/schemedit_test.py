@@ -57,9 +57,6 @@ test_pattern = \
 tested   = test_pattern[0::2]
 expected = test_pattern[1::2]
 val      = sce.trace(decode(3, tested), 2, 3, 1)
-for line in mapd(2, radix2_inv, val):
-  print(line)
-#if sce.trace(decode(3, tested), 2, 3, 1) == decode(2, expected):
 if val == decode(2, expected):
   print("[OK]", end="")
 else:
