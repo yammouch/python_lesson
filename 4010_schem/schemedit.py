@@ -97,15 +97,16 @@ def beam(field, p, o):
       r += 1
     return [[p[0], l], [p[0], r]]
 
-#(defn drawable? [y x os traced field] ; os:  orientation straight
-#  (let [dir (case os 0 [:d :u :r :l] 1 [:r :l :d :u])
-#        [sfwd sbwd ofwd obwd] (map #(net y x % field traced) dir)]
-#    (cond (=  sfwd        [1 0]       ) false
-#          (=  sbwd        [1 0]       ) false
-#          (= [obwd ofwd] [[1 0] [1 0]]) true
-#          (=  ofwd        [1 0]       ) false
-#          (=  obwd        [1 0]       ) false
-#          :else                         true)))
+def drawable(y, x, os, traced, field): # os:  orientation straight
+  dir = ['d', 'u', 'r', 'l'] if os == 0 else \
+        ['r', 'l', 'd', 'u'] if os == 1 else None
+  sfwd, sbwd, ofwd, obwd = [net(y, x, d, field, traced) for d in dir]
+  return False if  sfwd        ==  [1, 0]          else \
+         False if  sbwd        ==  [1, 0]          else \
+         True  if [obwd, ofwd] == [[1, 0], [1, 0]] else \
+         False if  ofwd        ==  [1, 0]          else \
+         False if  obwd        ==  [1, 0]          else \
+         True
 
 #(defn add-dot [from to os traced field]
 #  (->> (range-p from to os)
