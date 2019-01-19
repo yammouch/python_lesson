@@ -66,18 +66,25 @@ else:
   print("[ER]", end="")
 print(" trace")
 
-#(deftest test-beam
-#  (let [test-pattern
-#        ["0000000000"
-#         "0032227200"
-#         "0010001010"
-#         "0010001010"
-#         "0000000000"
-#         "0000000000"]]
-#    (is (= (smp/beam (decode 3 test-pattern) [1 4] 1)
-#           [[1 2] [1 6]]))
-#    (is (= (smp/beam (decode 3 test-pattern) [1 2] 0)
-#           [[1 2] [4 2]]))))
+test_pattern =\
+["0000000000",
+ "0032227200",
+ "0010001010",
+ "0010001010",
+ "0000000000",
+ "0000000000"]
+val = sce.beam(decode(3, test_pattern), [1, 4], 1)
+if val == [[1, 2], [1, 6]]:
+  print("[OK]", end="")
+else:
+  print("[ER]", end="")
+print(" beam")
+val = sce.beam(decode(3, test_pattern), [1, 2], 0)
+if val == [[1, 2], [4, 2]]:
+  print("[OK]", end="")
+else:
+  print("[ER]", end="")
+print(" beam")
 
 #(deftest test-drawable?
 #  (let [test-pattern

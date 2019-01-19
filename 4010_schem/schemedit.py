@@ -20,14 +20,20 @@ def surrounding(y,  x):
          , [y  , x-1, 1, y  , x-1, 1]   # left
          , [y  , x  , 1, y  , x+1, 1] ] # right
 
-#(defn net [y x d & fields]
-#  (let [idx (case d
-#              :u [(- y 1) x    0]
-#              :d [   y    x    0]
-#              :l [   y (- x 1) 1]
-#              :r [   y    x    1]
-#              :f [   y    x    2])]
-#    (mapv #(get-in % idx 0) fields)))
+def net(y, x, d, *fields):
+  idx = [y-1, x   , 0] if d == 'u' else \
+        [y  , x   , 0] if d == 'd' else \
+        [y  , x-1 , 1] if d == 'l' else \
+        [y  , x   , 1] if d == 'r' else \
+        [y  , x   , 2] if d == 'f' else None
+  acc = []
+  for fld in fields:
+    try:
+      n = fld[idx[0]][idx[1]][idx[2]]
+    except IndexError:
+      n = 0
+    acc.append[n]
+  return acc
 
 #(defn d-match [[y x] v & fields]
 #  (->> [:u :d :l :r]
@@ -69,15 +75,28 @@ def trace(field, y, x, d):
       traced[s[0]][s[1]][s[2]] = 1
   return traced
 
-#(defn beam [field p o]
-#  (mapv (fn [[d prog]]
-#          (->> (iterate #(update-in % [o] prog) p)
-#               (filter (fn [[y x]]
-#                         (or (= (net y x d  field) [0])    ; net end
-#                             (= (net y x :f field) [1])))) ; fanout dot
-#               first))
-#        [[(case o 0 :u 1 :l) dec]
-#         [(case o 0 :d 1 :r) inc]]))
+def beam(field, p, o):
+  if o == 0:
+    u = p[0]
+    while not (net(u, p[1], 0, field) == [0] or
+               net(u, p[1], 'f', field) == [1]):
+      u -= 1
+    d = p[0]
+    while not (net(d, p[1], 0, field) == [0] or
+               net(d, p[1], 'f', field) == [1]):
+      d += 1
+    return [[u, p[1]], [d, p[1]]]
+  #else if o == 1:
+  elif o == 1:
+    l = p[1]
+    while not (net(p[0], l, 0, field) == [0] or
+               net(p[0], l, 'f', field) == [1]):
+      l -= 1
+    r = p[1]
+    while not (net(p[0], r, 0, field) == [0] or
+               net(p[0], r, 'f', field) == [1]):
+      r += 1
+    return [[p[0], l], [p[0], r]]
 
 #(defn drawable? [y x os traced field] ; os:  orientation straight
 #  (let [dir (case os 0 [:d :u :r :l] 1 [:r :l :d :u])
