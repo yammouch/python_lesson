@@ -35,20 +35,24 @@ def net(y, x, d, *fields):
     acc.append(n)
   return acc
 
-#(defn d-match [[y x] v & fields]
-#  (->> [:u :d :l :r]
-#       (filter #(= v (apply net y x % fields)))
-#       ))
+def d_match(p, v, *fields):
+  return [d for d in ['u', 'd', 'l', 'r'] if net(p[0], [1], d, *fields) == v]
 
-#(defn range-2d [end from to o]
-#  (let [o (case o (:u :d) 0, (:l :r) 1, 0 0, 1 1)
-#        q (from o)
-#        to (if (vector? to) (to o) to)]
-#    (->> (apply range (if (< to q) [(+ q end -1) (- to 1) -1] [q (+ to end)]))
-#         (map (partial assoc from o)))))
+def range_2d(end, from_p, to, o)
+  o = 0 if o in {'u', 'd', 0} else \
+      1 if o in {'l', 'r', 1} else None
+  q = from_p[o]
+  if isinstance(to, list): to = to[o]
+  r = range(*([q + end - 1, to - 1, -1] if to < q else [q, to + end]))
+  if o == 0:
+    return [[y, from_p[1]] for y in r]
+  elif o == 1:
+    return [[from_p[0], x] for x in r]
 
-#(defn range-p [from to o] (range-2d 1 from to o))
-#(defn range-n [from to o] (range-2d 0 from to o))
+def range_p(from_p, to, o):
+  range_2d(1, from_p, to, o)
+def range_n(from_p, to, o):
+  range-2d(0, from_p, to, o)
 
 def trace_search_dir(field, traced, y, x, d):
   search = [s for s in surrounding(y, x) if field[s[0]][s[1]][s[2]] == 1]

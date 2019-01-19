@@ -83,25 +83,33 @@ else:
   print("[ER]", end="")
 print(" beam")
 
-#(deftest test-drawable?
-#  (let [test-pattern
-#        ["0000000000" "0000000000"
-#         "0032227200" "0032227200"
-#         "0010001010" "0010001010"
-#         "0010001010" "0010001010"
-#         "0000000000" "0000000000"
-#         "0032227200" "0000000000"
-#         "0010001010" "0000000000"
-#         "0010001010" "0000000000"
-#         "0000000000" "0000000000"]
-#        [field traced] (->> test-pattern
-#                            (map (partial decode1 3))
-#                            (partition 2)
-#                            (apply map vector))]
-#    (is      (smp/drawable? 4 2 1 traced field) )
-#    (is      (smp/drawable? 6 2 1 traced field) )
-#    (is (not (smp/drawable? 5 3 1 traced field)))
-#    ))
+test_pattern = \
+["0000000000", "0000000000",
+ "0032227200", "0032227200",
+ "0010001010", "0010001010",
+ "0010001010", "0010001010",
+ "0000000000", "0000000000",
+ "0032227200", "0000000000",
+ "0010001010", "0000000000",
+ "0010001010", "0000000000",
+ "0000000000", "0000000000"]
+field  = decode(3, test_pattern[0::2])
+traced = decode(3, test_pattern[1::2])
+if sce.drawable(4, 2, 1, traced, field):
+  print("[OK]", end="")
+else:
+  print("[ER]", end="")
+print(' drawable')
+if sce.drawable(6, 2, 1, traced, field):
+  print("[OK]", end="")
+else:
+  print("[ER]", end="")
+print(' drawable')
+if not sce.drawable(5, 3, 1, traced, field):
+  print("[OK]", end="")
+else:
+  print("[ER]", end="")
+print(' drawable')
 
 #(deftest test-add-dot
 #  (let [test-pattern
