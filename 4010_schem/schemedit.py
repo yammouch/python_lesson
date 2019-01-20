@@ -142,24 +142,10 @@ def search_short(from_p, d, traced, field):
   dops, to = ['d',  0] if d == 'u' else \
              ['u', cy] if d == 'd' else \
              ['r',  0] if d == 'l' else \
-             ['l', cx] if d == 'r' else None \
-    (let [[p] (filter #(as-> % x
-                             (d-match x [1 1] traced field)
-                             (remove #{dops} x)
-                             (not (empty? x)))
-                      (range-p from to d))]
-      (if p (range-p from p d))
-      )))
-#(defn search-short [from d traced field]
-#  (let [cy (- (count field) 1) cx (- (count (first field)) 1)
-#        [dops to] (case d :u [:d 0] :d [:u cy] :l [:r 0], :r [:l cx])]
-#    (let [[p] (filter #(as-> % x
-#                             (d-match x [1 1] traced field)
-#                             (remove #{dops} x)
-#                             (not (empty? x)))
-#                      (range-p from to d))]
-#      (if p (range-p from p d))
-#      )))
+             ['l', cx] if d == 'r' else None
+    for x in range_p(from_p, to, d):
+      if [x1 for x1 in d_match(x, [1, 1], traced, field) if not x1 == dops]:
+        return range_p(from_p, x, d)
 
 #(defn reach [[y x :as from] d traced field]
 #  (let [ps (search-short from d traced field)
