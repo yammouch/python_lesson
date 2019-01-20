@@ -111,30 +111,33 @@ else:
   print("[ER]", end="")
 print(' drawable')
 
-#(deftest test-add-dot
-#  (let [test-pattern
-#        ["0000000000" "0000000000" "0000000000"
-#         "0000000000" "0000000000" "0000000000"
-#         "0022232220" "0022272220" "0022272220"
-#         "0000010000" "0000010000" "0000010000"
-#         "0002210000" "0002210000" "0002250000"
-#         "0000010000" "0000010000" "0000010000"
-#         "0032232200" "0032232200" "0032232200"
-#         "0010010000" "0010010000" "0010010000"
-#         "0022200000" "0022200000" "0022200000"
-#         "0000000000" "0000000000" "0000000000"]
-#        [field ex1 ex2] (->> test-pattern
-#                             (map (partial decode1 3))
-#                             (partition 3)
-#                             (apply map vector))]
-#    (is (= (smp/add-dot [2 2] 8 1 field field) ex1  ))
-#    (is (= (smp/add-dot [2 5] 8 0 field field) ex2  ))
-#    ;(clojure.pprint/pprint
-#    ; (mapd 2 (comp (partial reduce (fn [acc x] (+ (* acc 2) x)))
-#    ;               reverse)
-#    ;         (smp/add-dot [2 5] 8 0 field field)))
-#    (is (= (smp/add-dot [7 2] 8 1 field field) field))
-#    ))
+test_pattern = \
+["0000000000", "0000000000", "0000000000",
+ "0000000000", "0000000000", "0000000000",
+ "0022232220", "0022272220", "0022272220",
+ "0000010000", "0000010000", "0000010000",
+ "0002210000", "0002210000", "0002250000",
+ "0000010000", "0000010000", "0000010000",
+ "0032232200", "0032232200", "0032232200",
+ "0010010000", "0010010000", "0010010000",
+ "0022200000", "0022200000", "0022200000",
+ "0000000000", "0000000000", "0000000000"]
+field, ex1, ex2 = [decode(3, test_pattern[i::3]) for i in range(3)]
+if sce.add_dot([2, 2], 8, 1, field, field) == ex1:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' add_dot')
+if sce.add_dot([2, 5], 8, 0, field, field) == ex2:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' add_dot')
+if sce.add_dot([7, 2], 8, 1, field, field) == field:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' add_dot')
 
 #(deftest test-draw-net-1
 #  (let [test-pattern 

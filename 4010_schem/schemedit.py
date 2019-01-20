@@ -1,3 +1,4 @@
+import copy
 
 def radix_inv(rdx, a):
   acc = 0
@@ -36,9 +37,9 @@ def net(y, x, d, *fields):
   return acc
 
 def d_match(p, v, *fields):
-  return [d for d in ['u', 'd', 'l', 'r'] if net(p[0], [1], d, *fields) == v]
+  return [d for d in ['u', 'd', 'l', 'r'] if net(p[0], p[1], d, *fields) == v]
 
-def range_2d(end, from_p, to, o)
+def range_2d(end, from_p, to, o):
   o = 0 if o in {'u', 'd', 0} else \
       1 if o in {'l', 'r', 1} else None
   q = from_p[o]
@@ -50,9 +51,9 @@ def range_2d(end, from_p, to, o)
     return [[from_p[0], x] for x in r]
 
 def range_p(from_p, to, o):
-  range_2d(1, from_p, to, o)
+  return range_2d(1, from_p, to, o)
 def range_n(from_p, to, o):
-  range-2d(0, from_p, to, o)
+  return range_2d(0, from_p, to, o)
 
 def trace_search_dir(field, traced, y, x, d):
   search = [s for s in surrounding(y, x) if field[s[0]][s[1]][s[2]] == 1]
@@ -112,11 +113,12 @@ def drawable(y, x, os, traced, field): # os:  orientation straight
          False if  obwd        ==  [1, 0]          else \
          True
 
-#(defn add-dot [from to os traced field]
-#  (->> (range-p from to os)
-#       (filter #(= 3 (count (d-match % [1 1] field traced))))
-#       (reduce (fn [fld [y x]] (assoc-in fld [y x 2] 1))
-#               field)))
+def add_dot(from_p, to, os, traced, field):
+  retval = copy.deepcopy(field)
+  for y, x in [p for p in range_p(from_p, to, os)
+               if len(d_match(p, [1, 1], field, traced)) == 3]:
+    retval[y][x][2] = 1
+  return retval
 
 #(defn draw-net-1 [from to o field]
 #  (reduce (fn [fld [y x]] (assoc-in fld [y x o] 1))
