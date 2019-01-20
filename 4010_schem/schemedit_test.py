@@ -224,7 +224,7 @@ if sce.reach([3, 8], 'l', traced, field) == None:
 else:
   print('[ER]', end='')
 print(' reach')
-if sce.reach([3, 8], 'r', traced, field)[1] == None:
+if sce.reach([3, 8], 'r', traced, field) == None:
   print('[OK]', end='')
 else:
   print('[ER]', end='')

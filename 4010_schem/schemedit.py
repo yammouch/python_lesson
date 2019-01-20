@@ -149,13 +149,13 @@ def search_short(from_p, d, traced, field):
 
 def reach(from_p, d, traced, field):
   ps = search_short(from_p, d, traced, field)
-  o = 0 if d in {'u' 'd'} else \
-      1 if d in {'l' 'r'} else None
+  o = 0 if d in {'u', 'd'} else \
+      1 if d in {'l', 'r'} else None
   if ps and all([drawable(y, x, o, traced, field) for y, x in ps]):
     to = ps[-1]
     drawn = draw_net_1(from_p, to[o], o, field)
     traced_new = draw_net_1(from_p, to[o], o, traced)
-    if len(d-match(to, [1, 1], traced_new, drawn)) == 3:
+    if len(d_match(to, [1, 1], traced_new, drawn)) == 3:
       drawn[to[0]][to[1]][2] = 1
     return [traced_new, drawn]
 
