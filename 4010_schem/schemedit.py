@@ -136,6 +136,20 @@ def stumble(from_p, to, o, traced, field):
 #  (let [[o f] (case d :u [0 dec] :d [0 inc] :l [1 dec] :r [1 inc])]
 #    (update-in p [o] f)))
 
+def search_short(from_p, d, traced, field):
+  cy = len(field   ) - 1
+  cx = len(field[0]) - 1
+  dops, to = ['d',  0] if d == 'u' else \
+             ['u', cy] if d == 'd' else \
+             ['r',  0] if d == 'l' else \
+             ['l', cx] if d == 'r' else None \
+    (let [[p] (filter #(as-> % x
+                             (d-match x [1 1] traced field)
+                             (remove #{dops} x)
+                             (not (empty? x)))
+                      (range-p from to d))]
+      (if p (range-p from p d))
+      )))
 #(defn search-short [from d traced field]
 #  (let [cy (- (count field) 1) cx (- (count (first field)) 1)
 #        [dops to] (case d :u [:d 0] :d [:u cy] :l [:r 0], :r [:l cx])]
