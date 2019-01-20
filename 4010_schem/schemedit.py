@@ -120,9 +120,11 @@ def add_dot(from_p, to, os, traced, field):
     retval[y][x][2] = 1
   return retval
 
-#(defn draw-net-1 [from to o field]
-#  (reduce (fn [fld [y x]] (assoc-in fld [y x o] 1))
-#          field (range-n from to o)))
+def draw_net_1(from_p, to, o, field):
+  retval = copy.deepcopy(field)
+  for y, x in range_n(from_p, to, o):
+    retval[y][x][o] = 1
+  return retval
 
 #(defn stumble [from to o traced field]
 #  (when (every? (fn [[y x]] (drawable? y x o traced field))
