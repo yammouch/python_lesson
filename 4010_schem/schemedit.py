@@ -147,21 +147,17 @@ def search_short(from_p, d, traced, field):
       if [x1 for x1 in d_match(x, [1, 1], traced, field) if not x1 == dops]:
         return range_p(from_p, x, d)
 
-#(defn reach [[y x :as from] d traced field]
-#  (let [ps (search-short from d traced field)
-#        o (case d (:u :d) 0 (:l :r) 1)]
-#    (if (and ps
-#             (every? (fn [[y x]] (drawable? y x o traced field))
-#                     ps))
-#      (let [to (last ps)
-#            drawn (draw-net-1 from (to o) o field)
-#            traced-new (draw-net-1 from (to o) o traced)]
-#        [traced-new
-#         (if (as-> (d-match to [1 1] traced-new drawn) x
-#                   (count x)
-#                   (= 3 x))
-#           (assoc-in drawn (conj to 2) 1)
-#           drawn)]))))
+def reach(from_p, d, traced, field):
+  ps = search_short(from_p, d, traced, field)
+  o = 0 if d in {'u' 'd'} else \
+      1 if d in {'l' 'r'} else None
+  if ps and all([drawable(y, x, o, traced, field) for y, x in ps])
+    to = ps[-1]
+    drawn = draw_net_1(from_p, to[o], o, field)
+    traced_new = draw_net_1(from_p, to[o], o, traced)
+    if len(d-match(to, [1, 1], traced_new, drawn)) == 3:
+      drawn[to[0]][to[1]][2] = 1
+    return [traced_new, drawn]
 
 #(defn debridge [from to o field]
 #  (as-> field fld

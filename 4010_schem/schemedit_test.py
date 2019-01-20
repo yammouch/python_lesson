@@ -197,26 +197,38 @@ else:
   print('[ER]', end='')
 print(' stumble')
 
-#(deftest test-reach
-#  (let [test-pattern
-#        ["0000000000" "0000000000" "0000000000" "0000000000"
-#         "0010000000" "0010000000" "0010000000" "0010000000"
-#         "0010000000" "0010000000" "0010000000" "0010000000"
-#         "0010002200" "0010000000" "0010002200" "0010002200"
-#         "0010000000" "0010000000" "0010000000" "0010000000"
-#         "0010000000" "0010000000" "0010000000" "0010000000"
-#         "0000000000" "0000000000" "0000000000" "0010000000"
-#         "0000000000" "0000000000" "0000000000" "0000000000"
-#         "0000000000" "0000000000" "0000000000" "0000000000"
-#         "0000000000" "0000000000" "0000000000" "0000000000"]
-#        [field traced ex1 ex2] (as-> test-pattern t
-#                                     (map (partial decode1 3) t)
-#                                     (partition 4 t)
-#                                     (apply map vector t))]
-#    (is (= (nth (smp/reach [3 2] :u traced field) 1) ex1))
-#    (is (= (nth (smp/reach [7 2] :u traced field) 1) ex2))
-#    (is (= (nth (smp/reach [3 8] :l traced field) 1) nil))
-#    (is (= (nth (smp/reach [3 8] :r traced field) 1) nil))))
+test_pattern = \
+["          ", "          ", "          ", "          ",
+ "  1       ", "  1       ", "  1       ", "  1       ",
+ "  1       ", "  1       ", "  1       ", "  1       ",
+ "  1   22  ", "  1       ", "  1   22  ", "  1   22  ",
+ "  1       ", "  1       ", "  1       ", "  1       ",
+ "  1       ", "  1       ", "  1       ", "  1       ",
+ "          ", "          ", "          ", "  1       ",
+ "          ", "          ", "          ", "          ",
+ "          ", "          ", "          ", "          ",
+ "          ", "          ", "          ", "          "]
+field, traced, ex1, ex2 = [decode(3, test_pattern[i::4]) for i in range(4)]
+if sce.reach([3, 2], 'u', traced, field)[1] == ex1:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' reach')
+if sce.reach([7, 2], 'u', traced, field)[1] == ex2:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' reach')
+if sce.reach([3, 8], 'l', traced, field) == None:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' reach')
+if sce.reach([3, 8], 'r', traced, field)[1] == None:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' reach')
 
 #(deftest test-debridge
 #  (let [test-pattern
