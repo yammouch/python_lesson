@@ -126,13 +126,11 @@ def draw_net_1(from_p, to, o, field):
     retval[y][x][o] = 1
   return retval
 
-#(defn stumble [from to o traced field]
-#  (when (every? (fn [[y x]] (drawable? y x o traced field))
-#                (range-p from to o))
-#    [(draw-net-1 from to o traced)
-#     (as-> field fld
-#           (draw-net-1 from to o fld)
-#           (add-dot from to o traced fld))]))
+def stumble(from_p, to, o, traced, field):
+  if all(drawable(y, x, o, traced, field) for y, x in range_p(from_p, to, o)):
+    return [draw_net_1(from_p, to, o, traced),
+            add_dot(from_p, to, o, traced,
+                    draw_net_1(from_p, to, o, field))]
 
 #(defn prog [d p]
 #  (let [[o f] (case d :u [0 dec] :d [0 inc] :l [1 dec] :r [1 inc])]

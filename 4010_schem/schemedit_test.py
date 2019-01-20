@@ -162,26 +162,40 @@ else:
   print('[ER]', end='')
 print(' draw_net_1')
 
-#(deftest test-stumble
-#  (let [test-pattern
-#        ["0000000000" "0000000000" "0000000000" "0000000000"
-#         "0000000000" "0000000000" "0000000000" "0000001000"
-#         "0000022200" "0000000000" "0000022200" "0000023200"
-#         "0000000000" "0000000000" "0000000000" "0000001000"
-#         "0000022200" "0000022200" "0022222200" "0000023200"
-#         "0000000000" "0000000000" "0000000000" "0000001000"
-#         "0000022200" "0000022200" "0000022200" "0000022200"
-#         "0000000000" "0000000000" "0000000000" "0000000000"
-#         "0000000000" "0000000000" "0000000000" "0000000000"
-#         "0000000000" "0000000000" "0000000000" "0000000000"]
-#        [field traced ex1 ex2] (as-> test-pattern t
-#                                     (map (partial decode1 3) t)
-#                                     (partition 4 t)
-#                                     (apply map vector t))]
-#    (is (= (nth (smp/stumble [2 2] 5 1 traced field) 1) nil))
-#    (is (= (nth (smp/stumble [4 2] 6 1 traced field) 1) ex1))
-#    (is (= (nth (smp/stumble [1 5] 6 0 traced field) 1) nil))
-#    (is (= (nth (smp/stumble [1 6] 6 0 traced field) 1) ex2))))
+test_pattern = \
+["          ", "          ", "          ", "          ",
+ "          ", "          ", "          ", "      1   ",
+ "     222  ", "          ", "     222  ", "     232  ",
+ "          ", "          ", "          ", "      1   ",
+ "     222  ", "     222  ", "  222222  ", "     232  ",
+ "          ", "          ", "          ", "      1   ",
+ "     222  ", "     222  ", "     222  ", "     222  ",
+ "          ", "          ", "          ", "          ",
+ "          ", "          ", "          ", "          ",
+ "          ", "          ", "          ", "          "]
+field, traced, ex1, ex2 = [decode(3, test_pattern[i::4]) for i in range(4)]
+#if sce.stumble([2, 2], 5, 1, traced, field)[1] == None:
+if sce.stumble([2, 2], 5, 1, traced, field) == None:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' stumble')
+if sce.stumble([4, 2], 6, 1, traced, field)[1] == ex1:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' stumble')
+#if sce.stumble([1, 5], 6, 0, traced, field)[1] == None:
+if sce.stumble([1, 5], 6, 0, traced, field) == None:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' stumble')
+if sce.stumble([1, 6], 6, 0, traced, field)[1] == ex2:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' stumble')
 
 #(deftest test-reach
 #  (let [test-pattern
