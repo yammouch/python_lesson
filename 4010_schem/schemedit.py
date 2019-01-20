@@ -159,6 +159,18 @@ def reach(from_p, d, traced, field):
       drawn[to[0]][to[1]][2] = 1
     return [traced_new, drawn]
 
+def debridge(from_p, to, o, field):
+  fld = copy.deepcopy(field)
+  for y, x in range_n(from_p, to, o):
+    fld[y][x][o] = 0
+  (as-> field fld
+        (reduce #(assoc-in %1 (conj %2 o) 0)
+                fld (range-n from to o))
+        (reduce #(case (count (d-match %2 [1] %1))
+                   (0 1 2) (assoc-in %1 (conj %2 2) 0)
+                   3       (assoc-in %1 (conj %2 2) 1)
+                   %1)
+                fld (range-p from to o))))
 #(defn debridge [from to o field]
 #  (as-> field fld
 #        (reduce #(assoc-in %1 (conj %2 o) 0)
