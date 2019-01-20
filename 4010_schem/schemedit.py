@@ -143,15 +143,15 @@ def search_short(from_p, d, traced, field):
              ['u', cy] if d == 'd' else \
              ['r',  0] if d == 'l' else \
              ['l', cx] if d == 'r' else None
-    for x in range_p(from_p, to, d):
-      if [x1 for x1 in d_match(x, [1, 1], traced, field) if not x1 == dops]:
-        return range_p(from_p, x, d)
+  for x in range_p(from_p, to, d):
+    if [x1 for x1 in d_match(x, [1, 1], traced, field) if not x1 == dops]:
+      return range_p(from_p, x, d)
 
 def reach(from_p, d, traced, field):
   ps = search_short(from_p, d, traced, field)
   o = 0 if d in {'u' 'd'} else \
       1 if d in {'l' 'r'} else None
-  if ps and all([drawable(y, x, o, traced, field) for y, x in ps])
+  if ps and all([drawable(y, x, o, traced, field) for y, x in ps]):
     to = ps[-1]
     drawn = draw_net_1(from_p, to[o], o, field)
     traced_new = draw_net_1(from_p, to[o], o, traced)
