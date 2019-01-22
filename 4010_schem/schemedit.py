@@ -164,11 +164,12 @@ def debridge(from_p, to, o, field):
   for y, x in range_n(from_p, to, o):
     fld[y][x][o] = 0
   for y, x in range_p(from_p, to, o):
-    dm = d_match([y, x], [1], fld)
+    dm = len(d_match([y, x], [1], fld))
     if dm in [0, 1, 2]:
       fld[y][x][2] = 0
     elif dm == 3:
       fld[y][x][2] = 1
+  return fld
 
 #(defn shave [from to d field]
 #  (let [o (case d (:u :d) 0 (:l :r) 1)]
