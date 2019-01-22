@@ -230,25 +230,33 @@ else:
   print('[ER]', end='')
 print(' reach')
 
-#(deftest test-debridge
-#  (let [test-pattern
-#        ["0000000000" "0000000000" "0000000000" "0000000000"
-#         "0032221000" "0010001000" "0032220000" "0032221000"
-#         "0010001000" "0010001000" "0010000000" "0010001000"
-#         "0010001000" "0010001000" "0010000000" "0010001000"
-#         "0072225000" "0072225000" "0072221000" "0010001000"
-#         "0010001000" "0010001000" "0010001000" "0010001000"
-#         "0000001000" "0000001000" "0000001000" "0000001000"
-#         "0000001000" "0000001000" "0000001000" "0000001000"
-#         "0000220000" "0000220000" "0000220000" "0000220000"
-#         "0000000000" "0000000000" "0000000000" "0000000000"]
-#        [field ex1 ex2 ex3] (as-> test-pattern t
-#                                  (map (partial decode1 3) t)
-#                                  (partition 4 t)
-#                                  (apply map vector t))]
-#    (is (= (smp/debridge [1 2] 6 1 field) ex1))
-#    (is (= (smp/debridge [1 6] 4 0 field) ex2))
-#    (is (= (smp/debridge [4 2] 6 1 field) ex3))))
+test_pattern = \
+["          ", "          ", "          ", "          ",
+ "  32221   ", "  1   1   ", "  3222    ", "  32221   ",
+ "  1   1   ", "  1   1   ", "  1       ", "  1   1   ",
+ "  1   1   ", "  1   1   ", "  1       ", "  1   1   ",
+ "  72225   ", "  72225   ", "  72221   ", "  1   1   ",
+ "  1   1   ", "  1   1   ", "  1   1   ", "  1   1   ",
+ "      1   ", "      1   ", "      1   ", "      1   ",
+ "      1   ", "      1   ", "      1   ", "      1   ",
+ "    22    ", "    22    ", "    22    ", "    22    ",
+ "          ", "          ", "          ", "          "]
+field, ex1, ex2, ex3 = [decode(3, test_pattern[i::4]) for i in range(4)]
+if sce.debridge([1, 2], 6, 1, field) == ex1:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' debridge')
+if sce.debridge([1, 6], 4, 0, field) == ex2:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' debridge')
+if sce.debridge([4, 2], 6, 1, field) == ex3:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' debridge')
 
 #(deftest test-shave
 #  (let [test-pattern

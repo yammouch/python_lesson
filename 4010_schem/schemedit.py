@@ -163,23 +163,12 @@ def debridge(from_p, to, o, field):
   fld = copy.deepcopy(field)
   for y, x in range_n(from_p, to, o):
     fld[y][x][o] = 0
-  (as-> field fld
-        (reduce #(assoc-in %1 (conj %2 o) 0)
-                fld (range-n from to o))
-        (reduce #(case (count (d-match %2 [1] %1))
-                   (0 1 2) (assoc-in %1 (conj %2 2) 0)
-                   3       (assoc-in %1 (conj %2 2) 1)
-                   %1)
-                fld (range-p from to o))))
-#(defn debridge [from to o field]
-#  (as-> field fld
-#        (reduce #(assoc-in %1 (conj %2 o) 0)
-#                fld (range-n from to o))
-#        (reduce #(case (count (d-match %2 [1] %1))
-#                   (0 1 2) (assoc-in %1 (conj %2 2) 0)
-#                   3       (assoc-in %1 (conj %2 2) 1)
-#                   %1)
-#                fld (range-p from to o))))
+  for y, x in range_p(from_p, to, o):
+    dm = d_match([y, x], [1], fld)
+    if dm in [0, 1, 2]:
+      fld[y][x][2] = 0
+    elif dm == 3:
+      fld[y][x][2] = 1
 
 #(defn shave [from to d field]
 #  (let [o (case d (:u :d) 0 (:l :r) 1)]
