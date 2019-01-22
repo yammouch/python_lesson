@@ -132,9 +132,17 @@ def stumble(from_p, to, o, traced, field):
             add_dot(from_p, to, o, traced,
                     draw_net_1(from_p, to, o, field))]
 
-#(defn prog [d p]
-#  (let [[o f] (case d :u [0 dec] :d [0 inc] :l [1 dec] :r [1 inc])]
-#    (update-in p [o] f)))
+def prog(d, p):
+  retval = copy.copy(p)
+  if d == 'u':
+    retval[0] -= 1
+  elif d == 'd':
+    retval[0] += 1
+  elif d == 'l':
+    retval[1] -= 1
+  elif d == 'r':
+    retval[1] += 1
+  return retval
 
 def search_short(from_p, d, traced, field):
   cy = len(field   ) - 1
@@ -171,31 +179,37 @@ def debridge(from_p, to, o, field):
       fld[y][x][2] = 1
   return fld
 
-#(defn shave [from to d field]
-#  (let [o (case d (:u :d) 0 (:l :r) 1)]
-#    (loop [[y x :as p] from fld field]
-#      (let [n (mapcat #(net y x % fld)
-#                      (case d
-#                        :u [:u :d :l :r :f]
-#                        :d [:d :u :l :r :f]
-#                        :l [:l :r :u :d :f]
-#                        :r [:r :l :u :d :f]))]
-#        (if (and (or (= n [1 0 0 0 0])
-#                     (= n [1 0 1 1 0]))
-#                 (every? zero? (drop 3 (get-in fld p)))
-#                 (not= (p o) to))
-#          (recur (prog d p)
-#                 (assoc-in fld
-#                  [(if (= d :u) (- y 1) y)
-#                   (if (= d :l) (- x 1) x)
-#                   (case d (:u :d) 0 (:l :r) 1)]
-#                  0))
-#          (case (->> (take 4 n)
-#                     (filter (partial = 1))
-#                     count)
-#            (0 1 2) (assoc-in fld [y x 2] 0)
-#            3       (assoc-in fld [y x 2] 1)
-#            4       fld))))))
+def shave(from_p, to, d, field):
+  o = 0 if d in ['u', 'd'] else \
+      1 if d in ['l', 'r'] else None
+  p = from_p
+  fld = field
+  while True:
+    dirs = ['u', 'd', 'l', 'r', 'f'] if d = 'u' else \
+           ['d', 'u', 'l', 'r', 'f'] if d = 'd' else \
+           ['l', 'r', 'u', 'd', 'f'] if d = 'l' else \
+           ['r', 'l', 'u', 'd', 'f'] if d = 'r' else None
+    n = []
+    for d in dirs:
+      n.extend(net(p[0], p[1], d, fld))
+    if (n == [1, 0, 0, 0, 0] or n == [1, 0, 1, 1, 0]) and \
+       all([e == 0 for e in fld[p[0]][p[1]][3:]]) and \
+       not (p[o] == to):
+      p = prog(d, p)
+      y = p[0]
+      x = p[1]
+      if d == 'u':
+        y -= 1
+      if d == 'l':
+        x -= 1
+      fld[y][x][o] = 0
+    else:
+      n_net = len([x in x in n[:4] if x == 1])
+      if n_net in [0, 1, 2]:
+        fld[p[0]][p[1]][2] = 0
+      if n_net == 3:
+        fld[p[0]][p[1]][2] = 1
+      return fld
 
 #(defn move-element [field [y x :as from] d to]
 #  (let [to (assoc from d to)
