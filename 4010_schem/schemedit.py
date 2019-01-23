@@ -183,19 +183,18 @@ def shave(from_p, to, d, field):
   o = 0 if d in ['u', 'd'] else \
       1 if d in ['l', 'r'] else None
   p = from_p
-  fld = field
+  fld = copy.deepcopy(field)
   dirs = ['u', 'd', 'l', 'r', 'f'] if d == 'u' else \
          ['d', 'u', 'l', 'r', 'f'] if d == 'd' else \
          ['l', 'r', 'u', 'd', 'f'] if d == 'l' else \
          ['r', 'l', 'u', 'd', 'f'] if d == 'r' else None
   while True:
     n = []
-    for d in dirs:
-      n.extend(net(p[0], p[1], d, fld))
+    for x in dirs:
+      n.extend(net(p[0], p[1], x, fld))
     if (n == [1, 0, 0, 0, 0] or n == [1, 0, 1, 1, 0]) and \
        all([e == 0 for e in fld[p[0]][p[1]][3:]]) and \
        not (p[o] == to):
-      p = prog(d, p)
       y = p[0]
       x = p[1]
       if d == 'u':
@@ -203,6 +202,7 @@ def shave(from_p, to, d, field):
       if d == 'l':
         x -= 1
       fld[y][x][o] = 0
+      p = prog(d, p)
     else:
       n_net = len([x for x in n[0:4] if x == 1])
       if n_net in [0, 1, 2]:
