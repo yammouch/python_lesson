@@ -205,6 +205,25 @@ def shave(from_p, to, d, field):
         fld[p[0]][p[1]][2] = 1
       return fld
 
+def move_element(field, from_p, d, to):
+  fp = copy.copy(from_p)
+  fp[d] = to
+  to = fp
+  from_el = field[from_p[0]][from_p[1]][3:]
+  to_el   = field[to    [0]][to    [1]][3:]
+  if all([x == 0 for x in to_el]):
+    fld = copy.deepcopy(field)
+  (let [to (assoc from d to)
+        from-el (drop 3 (get-in field from))
+        to-el   (drop 3 (get-in field to  ))]
+    (if (every? zero? to-el)
+      (as-> field fld
+            (update-in fld to
+             (fn [v] (vec (concat (take 3 v) from-el))))
+            (update-in fld from
+             (fn [v] (vec (take (count v)
+                                (concat (take 3 v) (repeat 0))
+                                ))))))))
 #(defn move-element [field [y x :as from] d to]
 #  (let [to (assoc from d to)
 #        from-el (drop 3 (get-in field from))
