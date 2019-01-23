@@ -304,20 +304,20 @@ else:
   print('[ER]', end='')
 print(' move_x')
 
-#(deftest test-move-y
-#  (let [test-pattern
-#        ["0000000000" "0000000000"
-#         "0032221000" "0000000000"
-#         "0010001000" "0000000000"
-#         "0010001000" "0000000000"
-#         "0022223220" "0022227220"
-#         "0000001000" "0000001000"
-#         "0000001000" "0000001000"
-#         "0000001000" "0000001000"
-#         "0000000000" "0000000000"
-#         "0000000000" "0000000000"]
-#        [field ex1] (as-> test-pattern t
-#                          (map (partial decode1 3) t)
-#                          (partition 2 t)
-#                          (apply map vector t))]
-#    (is (= (smp/move-y field [1 4] 4) ex1))))
+test_pattern = \
+["          ", "          ",
+ "  32221   ", "          ",
+ "  1   1   ", "          ",
+ "  1   1   ", "          ",
+ "  2222322 ", "  2222722 ",
+ "      1   ", "      1   ",
+ "      1   ", "      1   ",
+ "      1   ", "      1   ",
+ "          ", "          ",
+ "          ", "          "]
+field, ex1 = [decode(3, test_pattern[i::2]) for i in range(2)]
+if sce.move_y(field, [1, 4], 4) == ex1:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' move_y')

@@ -220,7 +220,7 @@ def move_x(field, from_p, to):
   y, x = from_p
   [y0, _], [y1, _] = beam(field, from_p, 0)
   traced = trace(field, y, x, 0)
-  d, dop = ('r', 'l') if x < to else ('l' 'r')
+  d, dop = ('r', 'l') if x < to else ('l', 'r')
   fld = move_element(field, from_p, 1, to)
   fld = reach([y0, to], dop, traced, fld)
   fld = reach([y1, to], dop, *fld) if fld else None
@@ -230,16 +230,16 @@ def move_x(field, from_p, to):
   fld = shave([y1, x], to, d, fld) if fld else None
   return fld
 
-#(defn move-y [field [y x :as from] to]
-#  (let [[[_ x0] [_ x1]] (beam field from 1)
-#        traced (trace field y x 1)
-#        [d dop] (if (< y to) [:d :u] [:u :d])]
-#    (as-> field fld
-#          (move-element fld from 0 to)
-#          (reach [to x0] dop traced fld)
-#          (if (nth fld 1) (apply reach [to x1] dop fld))
-#          (if (nth fld 1) (apply stumble [to x0] x1 1 fld))
-#          (if (nth fld 1) (debridge [y x0] x1 1 (nth fld 1)))
-#          (if fld (shave [y x0] to d fld))
-#          (if fld (shave [y x1] to d fld))
-#          )))
+def move_y(field, from_p, to):
+  y, x = from_p
+  [_, x0], [_, x1] = beam(field, from_p, 1)
+  traced = trace(field, y, x, 1)
+  d, dop = ('d', 'u') if y < to else ('u', 'd')
+  fld = move_element(field, from_p, 0, to)
+  fld = reach([to, x0], dop, traced, fld)
+  fld = reach([to, x1], dop, *fld) if fld else None
+  fld = stumble([to, x0], x1, 1, *fld) if fld else None
+  fld = debridge([y, x0], x1, 1, fld[1]) if fld else None
+  fld = shave([y, x0], to, d, fld) if fld else None
+  fld = shave([y, x1], to, d, fld) if fld else None
+  return fld
