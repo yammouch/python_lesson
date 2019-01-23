@@ -195,13 +195,7 @@ def shave(from_p, to, d, field):
     if (n == [1, 0, 0, 0, 0] or n == [1, 0, 1, 1, 0]) and \
        all([e == 0 for e in fld[p[0]][p[1]][3:]]) and \
        not (p[o] == to):
-      y = p[0]
-      x = p[1]
-      if d == 'u':
-        y -= 1
-      if d == 'l':
-        x -= 1
-      fld[y][x][o] = 0
+      fld[p[0]-1 if d == 'u' else p[0]][p[1]-1 if d == 'l' else p[1]][o] = 0
       p = prog(d, p)
     else:
       n_net = len([x for x in n[0:4] if x == 1])
