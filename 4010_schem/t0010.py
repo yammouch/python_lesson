@@ -1,41 +1,38 @@
-##!/usr/bin/env python
-## hoge test-run -- python -u 0040_schem/tr010.py -e 10 -b 16
-
 #from __future__ import print_function
 
-#import argparse
+import argparse
+import chainer
+import chainer.functions as F
+import chainer.links as L
 
-#import numpy as np
+class MLP(chainer.Chain):
 
-#import chainer
-#import chainer.functions as F
-#import chainer.links as L
-#from chainer import training
-#from chainer.training import extensions
+  n_out = 32
 
+  def __init__(self):
+    super(MLP, self).__init__()
+    with self.init_scope():
+      self.l1 = L.Convolution2D(6, 3, 3, pad=1)
+      self.l2 = L.Convolution2D(3, 3, 3, pad=1)
+      self.l3 = L.Linear(None, self.n_out)
 
-## Network definition
-#class MLP(chainer.Chain):
+  def __call__(self, x):
+    h1 = F.sigmoid(self.l1(x))
+    h2 = F.sigmoid(self.l2(h1))
+    return self.l3(F.reshape(h2, (-1, 3*10*10)))
 
-#    n_out = 32
+parser = argparse.ArgumentParser()
+parser.add_argument('--resultpath', '-r',
+ default='location of the training result')
+args = parser.parse_args()
 
-#    def __init__(self):
-#        super(MLP, self).__init__()
-#        with self.init_scope():
-#            self.l1 = L.Convolution2D(6, 3, 3, pad=1)
-#            self.l2 = L.Convolution2D(3, 3, 3, pad=1)
-#            self.l3 = L.Linear(None, self.n_out)
+model = MLP()
+chainer.serializers.load_npz(
+ '{}/results/412770/snapshot_iter_607500'.format(args.resultpath),
+ model)
 
-#    def __call__(self, x):
-#        h1 = F.sigmoid(self.l1(x))
-#        h2 = F.sigmoid(self.l2(h1))
-#        return self.l3(F.reshape(h2, (-1, 3*10*10)))
-
-#model = MLP()
-#serializers.load_npz('tr080_result/model_epoch-1', model)
-
-#print('model.l1.W:', model.l1.W)
-#print('model.l1.b:', model.l1.b)
+print('model.l1.W:', model.l1.W)
+print('model.l1.b:', model.l1.b)
 
 #for i in range(2):
 #  # Show the output
