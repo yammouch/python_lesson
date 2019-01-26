@@ -56,16 +56,26 @@ print('model.l1.b:', model.l1.b)
 
 #(defn make-schem []
 #  (:field (first (mlp.meander/ring-0 [10 10] [4 4 3 3 1 2]))))
-#[ '  ,  ,  ,  ,  ,  ,  ,  ,  ,  ' ,
-#  '0A,02,02,02,  ,  ,  ,  ,  ,  ' ,
-#  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
-#  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
-#  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
-#  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
-#  '  ,03,02,02,03,02,20,  ,02,10' ,
-#  '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
-#  '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
-#  '  ,02,02,02,  ,  ,  ,  ,  ,  ' ]
+schem = \
+[ '  ,  ,  ,  ,  ,  ,  ,  ,  ,  ' ,
+  '0A,02,02,02,  ,  ,  ,  ,  ,  ' ,
+  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
+  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
+  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
+  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
+  '  ,03,02,02,03,02,20,  ,02,10' ,
+  '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
+  '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
+  '  ,02,02,02,  ,  ,  ,  ,  ,  ' ]
+#for row in schem:
+#  print(row.split(','))
+#shamt = 1
+#for row in schem:
+#  print([(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')])
+schem_a = [ [ [(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')]
+              for row in schem ]
+            for shamt in range(6) ]
+print schem_a
 # - split by comma
 # - 0 if space, or mask and shift, on 2d matrix
 # - list comprehension
