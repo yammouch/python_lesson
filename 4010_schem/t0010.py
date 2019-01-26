@@ -56,6 +56,20 @@ print('model.l1.b:', model.l1.b)
 
 #(defn make-schem []
 #  (:field (first (mlp.meander/ring-0 [10 10] [4 4 3 3 1 2]))))
+#[ '  ,  ,  ,  ,  ,  ,  ,  ,  ,  ' ,
+#  '0A,02,02,02,  ,  ,  ,  ,  ,  ' ,
+#  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
+#  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
+#  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
+#  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
+#  '  ,03,02,02,03,02,20,  ,02,10' ,
+#  '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
+#  '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
+#  '  ,02,02,02,  ,  ,  ,  ,  ,  ' ]
+# - split by comma
+# - 0 if space, or mask and shift, on 2d matrix
+# - list comprehension
+# - np.array
 
 #(defn read-param [fname]
 #  (let [[x & xs] (read-string (str "(" (slurp fname) ")"))]
