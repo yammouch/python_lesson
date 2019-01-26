@@ -1,9 +1,21 @@
 #from __future__ import print_function
 
 import argparse
+import numpy as np
 import chainer
 import chainer.functions as F
 import chainer.links as L
+
+def format_field(ar):
+  acc = np.zeros(ar.shape[1:])
+  for i in range(ar.shape[0]):
+    acc += ar[i] * 2**i
+  sacc = []
+  for i in range(ar.shape[1]):
+    line = ','.join(['  ' if x == 0 else '{:02X}'.format(int(x))
+                    for x in acc[i]])
+    sacc.append(line)
+  return sacc
 
 class MLP(chainer.Chain):
 
@@ -72,10 +84,12 @@ schem = \
 #shamt = 1
 #for row in schem:
 #  print([(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')])
-schem_a = [ [ [(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')]
-              for row in schem ]
-            for shamt in range(6) ]
-print schem_a
+schem_a = np.array([ [ [(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')]
+                       for row in schem ]
+                     for shamt in range(6) ])
+#print schem_a
+for row in format_field(schem_a):
+  print(row)
 # - split by comma
 # - 0 if space, or mask and shift, on 2d matrix
 # - list comprehension
