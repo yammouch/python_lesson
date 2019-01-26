@@ -28,7 +28,7 @@ args = parser.parse_args()
 
 model = MLP()
 chainer.serializers.load_npz(
- '{}/results/412770/snapshot_iter_607500'.format(args.resultpath),
+ '{}/results/416982/model_epoch-1000'.format(args.resultpath),
  model)
 
 print('model.l1.W:', model.l1.W)
