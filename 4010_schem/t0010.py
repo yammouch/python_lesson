@@ -79,20 +79,29 @@ schem = \
   '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
   '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
   '  ,02,02,02,  ,  ,  ,  ,  ,  ' ]
+#schem_a = np.array([ [ [(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')]
+#                       for row in schem ]
+#                     for shamt in range(6) ],
+#                   dtype=np.float32)
 schem_a = np.array([ [ [(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')]
                        for row in schem ]
-                     for shamt in range(6) ],
-                   dtype=np.float32)
+                     for shamt in range(6) ])
 for row in format_field(schem_a):
   print(row)
-schem_a = schem_a[np.newaxis, ...]
-print(schem_a.shape)
-print(model(schem_a))
+cmd = model(schem_a[np.newaxis, ...].astype(np.float32))
+print(cmd)
+lens = [2, 10, 10, 10]
+acc = 0
+acc_list = []
+for i in lens:
+  acc_list.append((cmd[0].array)[acc:acc+i].argmax())
+  acc += i
+print(acc_list)
 
 # - [done] add an axes
 # - [done] call MLP
-# - decode, or max_index
-# - test np indexing
+# - [done] decode, or max_index
+# - [done] test np indexing
 # - moveaxes
 # - invoke schemedit
 
