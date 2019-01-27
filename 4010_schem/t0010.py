@@ -81,14 +81,16 @@ schem = \
   '  ,02,02,02,  ,  ,  ,  ,  ,  ' ]
 schem_a = np.array([ [ [(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')]
                        for row in schem ]
-                     for shamt in range(6) ])
+                     for shamt in range(6) ],
+                   dtype=np.float32)
 for row in format_field(schem_a):
   print(row)
-schem_a = schem_a[None, ...]
+schem_a = schem_a[np.newaxis, ...]
 print(schem_a.shape)
+print(model(schem_a))
 
 # - [done] add an axes
-# - call MLP
+# - [done] call MLP
 # - decode, or max_index
 # - test np indexing
 # - moveaxes
