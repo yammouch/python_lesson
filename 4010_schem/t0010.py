@@ -79,21 +79,20 @@ schem = \
   '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
   '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
   '  ,02,02,02,  ,  ,  ,  ,  ,  ' ]
-#for row in schem:
-#  print(row.split(','))
-#shamt = 1
-#for row in schem:
-#  print([(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')])
 schem_a = np.array([ [ [(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')]
                        for row in schem ]
                      for shamt in range(6) ])
-#print schem_a
 for row in format_field(schem_a):
   print(row)
-# - split by comma
-# - 0 if space, or mask and shift, on 2d matrix
-# - list comprehension
-# - np.array
+schem_a = schem_a[None, ...]
+print(schem_a.shape)
+
+# - [done] add an axes
+# - call MLP
+# - decode, or max_index
+# - test np indexing
+# - moveaxes
+# - invoke schemedit
 
 #(defn read-param [fname]
 #  (let [[x & xs] (read-string (str "(" (slurp fname) ")"))]
