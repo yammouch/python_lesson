@@ -5,6 +5,7 @@ import numpy as np
 import chainer
 import chainer.functions as F
 import chainer.links as L
+import schemedit as sce
 
 def format_field(ar):
   acc = np.zeros(ar.shape[1:])
@@ -97,6 +98,13 @@ for i in lens:
   acc_list.append((cmd[0].array)[acc:acc+i].argmax())
   acc += i
 print(acc_list)
+
+if acc_list[0] == 0:
+  editted = sce.move_y(np.moveaxis(schem_a, 0, 2), acc_list[1:2], acc_list[3])
+else:
+  editted = sce.move_x(np.moveaxis(schem_a, 0, 2), acc_list[1:2], acc_list[3])
+for row in editted:
+  print(row)
 
 # - [done] add an axes
 # - [done] call MLP
