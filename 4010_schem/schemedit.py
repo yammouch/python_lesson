@@ -192,6 +192,7 @@ def debridge(from_p, to, o, field):
   return fld
 
 def shave(from_p, to, d, field):
+  #print('### shave ###')
   o = 0 if d in ['u', 'd'] else \
       1 if d in ['l', 'r'] else None
   p = from_p
@@ -253,8 +254,13 @@ def move_y(field, from_p, to):
   fld = stumble([to, x0], x1, 1, *fld) if fld else None
   fld = debridge([y, x0], x1, 1, fld[1]) if fld else None
   #for row in fld: print(row)
-  for row in format_field(np.moveaxis(np.array(fld), 2, 0)): print(row)
+  #for row in format_field(np.moveaxis(np.array(fld), 2, 0)): print(row)
   #for row in fld[1]: print([radix_inv(2, x) for x in row])
+  #print(fld)
+  #print(type(fld))
+  #print('T' if fld else 'F')
   fld = shave([y, x0], to, d, fld) if fld else None
+  #fld = shave([y, x0], to, d, fld) if fld != None else None
   fld = shave([y, x1], to, d, fld) if fld else None
+  #fld = shave([y, x1], to, d, fld) if fld != None else None
   return fld

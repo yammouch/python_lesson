@@ -99,19 +99,30 @@ for i in lens:
   acc += i
 print(acc_list)
 
+schem_l = [ [ list(cell) for cell in row ]
+            for row in np.moveaxis(schem_a, 0, 2) ]
+#print(schem_l)
+#print(type(schem_l))
+#print(type(schem_l[0]))
+#print(type(schem_l[0][0]))
+#print(type(schem_l[0][0][0]))
 if acc_list[0] == 0:
-  editted = sce.move_y(np.moveaxis(schem_a, 0, 2), acc_list[1:3], acc_list[3])
+  #editted = sce.move_y(np.moveaxis(schem_a, 0, 2), acc_list[1:3], acc_list[3])
+  editted = sce.move_y(schem_l, acc_list[1:3], acc_list[3])
 else:
-  editted = sce.move_x(np.moveaxis(schem_a, 0, 2), acc_list[1:3], acc_list[3])
-for row in editted:
+  #editted = sce.move_x(np.moveaxis(schem_a, 0, 2), acc_list[1:3], acc_list[3])
+  editted = sce.move_x(schem_l, acc_list[1:3], acc_list[3])
+#for row in editted:
+#  print(row)
+for row in format_field(np.moveaxis(np.array(editted), 2, 0)):
   print(row)
 
 # - [done] add an axes
 # - [done] call MLP
 # - [done] decode, or max_index
 # - [done] test np indexing
-# - moveaxes
-# - invoke schemedit
+# - [done] moveaxes
+# - [done] invoke schemedit
 
 #(defn read-param [fname]
 #  (let [[x & xs] (read-string (str "(" (slurp fname) ")"))]
