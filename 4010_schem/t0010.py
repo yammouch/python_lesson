@@ -85,5 +85,8 @@ schem = \
 schem_l = [ [radix2(6, int('0' + cell, 16)) for cell in row.split(',')]
             for row in schem ]
 
-for row in format_field(np.moveaxis(np.array(fw(model, schem_l)), 2, 0)):
-  print(row)
+for i in range(3):
+  editted = fw(model, schem_l)
+  for row in format_field(np.moveaxis(np.array(fw(model, schem_l)), 2, 0)):
+    print(row)
+  schem_l = editted
