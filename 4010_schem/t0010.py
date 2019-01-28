@@ -34,6 +34,16 @@ def decode_one_hot(l):
     acc += i
   return acc_list
 
+def fw(model, schem):
+  schem_a = np.array([ [ [ cell[i] for cell in row ]
+                         for row in schem_l ]
+                       for i in range(6) ])
+  cmd = decode_one_hot(model(schem_a[np.newaxis, ...].astype(np.float32)))
+  if cmd[0] == 0:
+    return sce.move_y(schem_l, cmd[1:3], cmd[3])
+  else:
+    return sce.move_x(schem_l, cmd[1:3], cmd[3])
+
 class MLP(chainer.Chain):
 
   n_out = 32
@@ -74,45 +84,6 @@ schem = \
   '  ,02,02,02,  ,  ,  ,  ,  ,  ' ]
 schem_l = [ [radix2(6, int('0' + cell, 16)) for cell in row.split(',')]
             for row in schem ]
-schem_a = np.array([ [ [ cell[i] for cell in row ]
-                       for row in schem_l ]
-                     for i in range(6) ])
-for row in format_field(schem_a):
+
+for row in format_field(np.moveaxis(np.array(fw(model, schem_l)), 2, 0)):
   print(row)
-cmd = decode_one_hot(model(schem_a[np.newaxis, ...].astype(np.float32)))
-print(cmd)
-
-if cmd[0] == 0:
-  editted = sce.move_y(schem_l, cmd[1:3], cmd[3])
-else:
-  editted = sce.move_x(schem_l, cmd[1:3], cmd[3])
-for row in format_field(np.moveaxis(np.array(editted), 2, 0)):
-  print(row)
-
-#(defn fw [schem]
-#  (mlp/fw (float-array (mapcat (partial apply concat) schem)))
-#  (let [[cmd from-y from-x to] (parse-output-vector (:i (last @mlp/jk-mem)))]
-#    (clojure.pprint/pprint [cmd from-y from-x to])
-#    ((case cmd 1 smp/move-x 0 smp/move-y) schem [from-y from-x] to)))
-
-#(defn edit1 [schem]
-#  (clojure.pprint/pprint schem)
-#  (loop [i 0
-#         schem schem
-#         schem-next (fw schem)]
-#    (if (and (< i 100) schem-next)
-#      (recur (+ i 1) schem-next (fw schem-next))
-#      (clojure.pprint/pprint (format-field schem))
-#      )))
-
-#(defn main-loop [schems]
-#  (doseq [s schems]
-#    (edit1 s)))
-
-#(defn -main [param-fname]
-#  (let [schems [(make-schem)]
-#        [mlp-config params] (read-param param-fname)]
-#    (mlp/init mlp-config 0)
-#    (set-param params)
-#    (main-loop schems)))
-
