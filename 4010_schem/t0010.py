@@ -18,6 +18,13 @@ def format_field(ar):
     sacc.append(line)
   return sacc
 
+def radix2(length, n):
+  retval = []
+  for i in range(length):
+    retval.append(n & 1)
+    n >>= 1
+  return retval
+
 def decode_one_hot(l):
   lens = [2, 10, 10, 10]
   acc = 0
@@ -65,17 +72,16 @@ schem = \
   '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
   '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
   '  ,02,02,02,  ,  ,  ,  ,  ,  ' ]
-schem_a = np.array([ [ [(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')]
-                       for row in schem ]
-                     for shamt in range(6) ])
+schem_l = [ [radix2(6, int('0' + cell, 16)) for cell in row.split(',')]
+            for row in schem ]
+schem_a = np.array([ [ [ cell[i] for cell in row ]
+                       for row in schem_l ]
+                     for i in range(6) ])
 for row in format_field(schem_a):
   print(row)
 cmd = decode_one_hot(model(schem_a[np.newaxis, ...].astype(np.float32)))
 print(cmd)
 
-
-schem_l = [ [ list(cell) for cell in row ]
-            for row in np.moveaxis(schem_a, 0, 2) ]
 if cmd[0] == 0:
   editted = sce.move_y(schem_l, cmd[1:3], cmd[3])
 else:
