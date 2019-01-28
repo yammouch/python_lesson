@@ -18,6 +18,15 @@ def format_field(ar):
     sacc.append(line)
   return sacc
 
+def decode_one_hot(l):
+  lens = [2, 10, 10, 10]
+  acc = 0
+  acc_list = []
+  for i in lens:
+    acc_list.append((l[0].array)[acc:acc+i].argmax())
+    acc += i
+  return acc_list
+
 class MLP(chainer.Chain):
 
   n_out = 32
@@ -41,34 +50,10 @@ args = parser.parse_args()
 
 model = MLP()
 chainer.serializers.load_npz(
- '{}/results/416982/model_epoch-1000'.format(args.resultpath),
+ #'{}/results/416982/model_epoch-1000'.format(args.resultpath),
+ '{}/results/model_epoch-10'.format(args.resultpath),
  model)
 
-print('model.l1.W:', model.l1.W)
-print('model.l1.b:', model.l1.b)
-
-#for i in range(2):
-#  # Show the output
-#  x, t = test[i]
-#  print('input:', x)
-#  print('label:', t)
-
-#  y = model(x[None, ...])
-
-#  print('output:', y.data)
-#  #print('predicted_label:', y.data.argmax(axis=1)[0])
-
-#; lein run -m mlp.t0150-fw data/t0150_pr.dat
-
-#(ns mlp.t0150-fw
-#  (:gen-class)
-#  (:require [clojure.pprint]
-#            [mlp.mlp-jk :as mlp]
-#            [mlp.meander]
-#            [mlp.schemedit :as smp]))
-
-#(defn make-schem []
-#  (:field (first (mlp.meander/ring-0 [10 10] [4 4 3 3 1 2]))))
 schem = \
 [ '  ,  ,  ,  ,  ,  ,  ,  ,  ,  ' ,
   '0A,02,02,02,  ,  ,  ,  ,  ,  ' ,
@@ -80,84 +65,23 @@ schem = \
   '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
   '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
   '  ,02,02,02,  ,  ,  ,  ,  ,  ' ]
-#schem_a = np.array([ [ [(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')]
-#                       for row in schem ]
-#                     for shamt in range(6) ],
-#                   dtype=np.float32)
 schem_a = np.array([ [ [(int('0' + x, 16) >> shamt) & 1 for x in row.split(',')]
                        for row in schem ]
                      for shamt in range(6) ])
 for row in format_field(schem_a):
   print(row)
-cmd = model(schem_a[np.newaxis, ...].astype(np.float32))
+cmd = decode_one_hot(model(schem_a[np.newaxis, ...].astype(np.float32)))
 print(cmd)
-lens = [2, 10, 10, 10]
-acc = 0
-acc_list = []
-for i in lens:
-  acc_list.append((cmd[0].array)[acc:acc+i].argmax())
-  acc += i
-print(acc_list)
+
 
 schem_l = [ [ list(cell) for cell in row ]
             for row in np.moveaxis(schem_a, 0, 2) ]
-#print(schem_l)
-#print(type(schem_l))
-#print(type(schem_l[0]))
-#print(type(schem_l[0][0]))
-#print(type(schem_l[0][0][0]))
-if acc_list[0] == 0:
-  #editted = sce.move_y(np.moveaxis(schem_a, 0, 2), acc_list[1:3], acc_list[3])
-  editted = sce.move_y(schem_l, acc_list[1:3], acc_list[3])
+if cmd[0] == 0:
+  editted = sce.move_y(schem_l, cmd[1:3], cmd[3])
 else:
-  #editted = sce.move_x(np.moveaxis(schem_a, 0, 2), acc_list[1:3], acc_list[3])
-  editted = sce.move_x(schem_l, acc_list[1:3], acc_list[3])
-#for row in editted:
-#  print(row)
+  editted = sce.move_x(schem_l, cmd[1:3], cmd[3])
 for row in format_field(np.moveaxis(np.array(editted), 2, 0)):
   print(row)
-
-# - [done] add an axes
-# - [done] call MLP
-# - [done] decode, or max_index
-# - [done] test np indexing
-# - [done] moveaxes
-# - [done] invoke schemedit
-
-#(defn read-param [fname]
-#  (let [[x & xs] (read-string (str "(" (slurp fname) ")"))]
-#    [x (partition 2 xs)]))
-
-#(defn set-param [param]
-#  (dosync
-#    (doseq [[i p] param]
-#      (alter mlp/jk-mem #(assoc-in % [i :p] (float-array p)))
-#      )))
-
-#(defn split-output-vector [ns l]
-#  (loop [[x & xs] ns, l l, acc []]
-#    (if x
-#      (recur xs (drop x l) (conj acc (take x l)))
-#      acc)))
-
-#(defn decode-one-hot [l]
-#  (->> (map-indexed vector l)
-#       (apply max-key #(% 1))
-#       first))
-
-#(defn parse-output-vector [l]
-#  (mapv decode-one-hot (split-output-vector [2 10 10 10] l)))
-
-#(defn format-field [field]
-#  (mapv (fn [row]
-#          (as-> row r
-#                (map #(->> (reverse %)
-#                           (reduce (fn [acc x] (+ (* acc 2) x)))
-#                           (format "%02X"))
-#                     r)
-#                (interpose " " r)
-#                (apply str r)))
-#        field))
 
 #(defn fw [schem]
 #  (mlp/fw (float-array (mapcat (partial apply concat) schem)))
