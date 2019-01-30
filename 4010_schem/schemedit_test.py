@@ -1,3 +1,4 @@
+from __future__ import print_function
 import schemedit as sce
 
 if sce.surrounding(4, 6) == \

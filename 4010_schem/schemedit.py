@@ -1,4 +1,16 @@
 import copy
+import numpy as np
+
+def format_field(ar):
+  acc = np.zeros(ar.shape[1:])
+  for i in range(ar.shape[0]):
+    acc += ar[i] * 2**i
+  sacc = []
+  for i in range(ar.shape[1]):
+    line = ','.join(['  ' if x == 0 else '{:02X}'.format(int(x))
+                    for x in acc[i]])
+    sacc.append(line)
+  return sacc
 
 def radix_inv(rdx, a):
   acc = 0
@@ -180,6 +192,7 @@ def debridge(from_p, to, o, field):
   return fld
 
 def shave(from_p, to, d, field):
+  #print('### shave ###')
   o = 0 if d in ['u', 'd'] else \
       1 if d in ['l', 'r'] else None
   p = from_p
@@ -240,6 +253,14 @@ def move_y(field, from_p, to):
   fld = reach([to, x1], dop, *fld) if fld else None
   fld = stumble([to, x0], x1, 1, *fld) if fld else None
   fld = debridge([y, x0], x1, 1, fld[1]) if fld else None
+  #for row in fld: print(row)
+  #for row in format_field(np.moveaxis(np.array(fld), 2, 0)): print(row)
+  #for row in fld[1]: print([radix_inv(2, x) for x in row])
+  #print(fld)
+  #print(type(fld))
+  #print('T' if fld else 'F')
   fld = shave([y, x0], to, d, fld) if fld else None
+  #fld = shave([y, x0], to, d, fld) if fld != None else None
   fld = shave([y, x1], to, d, fld) if fld else None
+  #fld = shave([y, x1], to, d, fld) if fld != None else None
   return fld
