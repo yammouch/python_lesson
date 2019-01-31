@@ -11,7 +11,7 @@ import collections
 import copy
 import random
 
-import gym
+#import gym
 import numpy as np
 
 import chainer
@@ -23,18 +23,34 @@ from chainer import optimizers
 class QFunction(chainer.Chain):
   """Q-function represented by a MLP."""
 
-  def __init__(self, obs_size, n_actions, n_units=100):
+  def __init__(self, obs_size, n_actions):
     super(QFunction, self).__init__()
     with self.init_scope():
-      self.l0 = L.Linear(obs_size, n_units)
-      self.l1 = L.Linear(n_units, n_units)
-      self.l2 = L.Linear(n_units, n_actions)
+      self.l0 = L.Linear(obs_size, n_actions)
 
   def forward(self, x):
     """Compute Q-values of actions for given observations."""
-    h = F.relu(self.l0(x))
-    h = F.relu(self.l1(h))
-    return self.l2(h)
+    return self.l0(h)
+
+
+class MyEnv():
+
+  def __init__(self):
+    self.state = 0
+    self.success_cnt = 0
+
+  def reset(self):
+    self.state = 0
+    return [self.state, self.state ^ 1]
+
+  def step(self, action):
+    if action == self.state:
+      reward = 1
+      self.success_cnt += 1
+    else:
+      reward = 0
+    self.state = self.state ^ 1
+    return [self.state, self.state ^ 1], reward, self.success_cnt >= 5, None
 
 
 def get_greedy_action(Q, obs):
@@ -109,15 +125,21 @@ def main():
   parser.add_argument('--no-record', action='store_false', dest='record')
   args = parser.parse_args()
 
+  random.seed(1)
+
   # Initialize an environment
-  env = gym.make(args.env)
-  assert isinstance(env.observation_space, gym.spaces.Box)
-  assert isinstance(env.action_space, gym.spaces.Discrete)
-  obs_size = env.observation_space.low.size
-  n_actions = env.action_space.n
-  if args.record:
-    env = gym.wrappers.Monitor(env, args.out, force=True)
-  reward_threshold = env.spec.reward_threshold
+  #env = gym.make(args.env)
+  env = MyEnv()
+  #assert isinstance(env.observation_space, gym.spaces.Box)
+  #assert isinstance(env.action_space, gym.spaces.Discrete)
+  #obs_size = env.observation_space.low.size
+  obs_size = 2
+  #n_actions = env.action_space.n
+  n_actions = 2
+  #if args.record:
+  #  env = gym.wrappers.Monitor(env, args.out, force=True)
+  #reward_threshold = env.spec.reward_threshold
+  reward_threshold = 4
   if reward_threshold is not None:
     print('{} defines "solving" as getting average reward of {} over 100 '
           'consecutive trials.'.format(args.env, reward_threshold))
@@ -132,7 +154,8 @@ def main():
   iteration = 0
 
   # Initialize a model and its optimizer
-  Q = QFunction(obs_size, n_actions, n_units=args.unit)
+  #Q = QFunction(obs_size, n_actions, n_units=args.unit)
+  Q = QFunction(obs_size, n_actions)
   if args.gpu >= 0:
     chainer.backends.cuda.get_device_from_id(args.gpu).use()
     Q.to_gpu(args.gpu)
@@ -147,7 +170,8 @@ def main():
     R = 0.0  # Return (sum of rewards obtained in an episode)
     timestep = 0
 
-    while not done and timestep < env.spec.timestep_limit:
+    #while not done and timestep < env.spec.timestep_limit:
+    while not done and timestep < 20:
 
       # Epsilon is linearly decayed
       epsilon = 1.0 if len(D) < args.replay_start_size else \
@@ -159,7 +183,8 @@ def main():
 
       # Select an action epsilon-greedily
       if np.random.rand() < epsilon:
-        action = env.action_space.sample()
+        #action = env.action_space.sample()
+        action = random.sample([0, 1], 1)
       else:
         action = get_greedy_action(Q, obs)
 
