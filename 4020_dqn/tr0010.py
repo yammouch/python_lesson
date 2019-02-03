@@ -26,7 +26,7 @@ class QFunction(chainer.Chain):
   def __init__(self, obs_size, n_actions):
     super(QFunction, self).__init__()
     with self.init_scope():
-      self.l0 = L.Linear(obs_size, n_actions)
+      self.l0 = L.Linear(obs_size, n_actions, nobias=True)
 
   def forward(self, x):
     """Compute Q-values of actions for given observations."""
