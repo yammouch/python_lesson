@@ -41,7 +41,7 @@ class MyEnv():
 
   def reset(self):
     self.state = 0
-    return [self.state, self.state ^ 1]
+    return np.array([self.state, self.state ^ 1])
 
   def step(self, action):
     if action == self.state:
@@ -51,7 +51,7 @@ class MyEnv():
       reward = 0
     self.state = self.state ^ 1
     #return [self.state, self.state ^ 1], reward, self.success_cnt >= 5, None
-    return [self.state, self.state ^ 1], reward, False, None
+    return np.array([self.state, self.state ^ 1]), reward, False, None
 
 
 def get_greedy_action(Q, obs):
@@ -75,10 +75,10 @@ def update(Q, target_Q, opt, samples, gamma=0.99, target_type='double_dqn'):
   done = xp.asarray([sample[3] for sample in samples], dtype=np.float32)
   obs_next = xp.asarray([sample[4] for sample in samples], dtype=np.float32)
   # Predicted values: Q(s,a)
-  print('### Q(obs) = ')
-  print(Q(obs))
-  print('### action = ')
-  print(action)
+  #print('### Q(obs) = ')
+  #print(Q(obs))
+  #print('### action = ')
+  #print(action)
   y = F.select_item(Q(obs), action)
   # Target values: r + gamma * max_b Q(s',b)
   with chainer.no_backprop_mode():
@@ -189,7 +189,7 @@ def main():
       # Select an action epsilon-greedily
       if np.random.rand() < epsilon:
         #action = env.action_space.sample()
-        action = random.sample([0, 1], 1)
+        action = random.sample([0, 1], 1)[0]
       else:
         action = get_greedy_action(Q, obs)
 
