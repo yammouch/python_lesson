@@ -322,3 +322,9 @@ if sce.move_y(field, [1, 4], 4) == ex1:
 else:
   print('[ER]', end='')
 print(' move_y')
+
+if sce.count_corner_cross(field) == 4:
+  print('[OK]', end='')
+else:
+  print('[ER]', end='')
+print(' count_corner_cross')
