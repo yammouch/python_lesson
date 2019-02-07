@@ -126,9 +126,9 @@ def main():
   #assert isinstance(env.observation_space, gym.spaces.Box)
   #assert isinstance(env.action_space, gym.spaces.Discrete)
   #obs_size = env.observation_space.low.size
-  obs_size = 2
+  #obs_size = 2
   #n_actions = env.action_space.n
-  n_actions = 2
+  #n_actions = 2
   #if args.record:
   #  env = gym.wrappers.Monitor(env, args.out, force=True)
   #reward_threshold = env.spec.reward_threshold
@@ -148,7 +148,8 @@ def main():
 
   # Initialize a model and its optimizer
   #Q = QFunction(obs_size, n_actions, n_units=args.unit)
-  Q = QFunction(obs_size, n_actions)
+  #Q = QFunction(obs_size, n_actions)
+  Q = QFunction()
   if args.gpu >= 0:
     chainer.backends.cuda.get_device_from_id(args.gpu).use()
     Q.to_gpu(args.gpu)
