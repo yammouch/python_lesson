@@ -264,3 +264,16 @@ def move_y(field, from_p, to):
   fld = shave([y, x1], to, d, fld) if fld else None
   #fld = shave([y, x1], to, d, fld) if fld != None else None
   return fld
+
+def count_corner_cross(field):
+  cy = len(field)
+  cx = len(field[0])
+  retval = 0
+  for y in range(cy):
+    for x in range(cx):
+      a = []
+      for d in 'udlr':
+        a.extend(net(y, x, d, field))
+      if (a[0] or a[1]) and (a[2] or a[3]):
+        retval += 1
+  return retval
