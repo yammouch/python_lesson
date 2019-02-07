@@ -19,7 +19,8 @@ from chainer import functions as F
 from chainer import links as L
 from chainer import optimizers
 
-import env_0010 as E
+import env_0010
+import schemedit as sce
 
 
 class QFunction(chainer.Chain):
@@ -28,7 +29,7 @@ class QFunction(chainer.Chain):
   n_out = 2*10*10*9 + 1
 
   def __init__(self):
-    super(MLP, self).__init__()
+    super(QFunction, self).__init__()
     with self.init_scope():
       self.l1 = L.Convolution2D(6, 3, 3, pad=1)
       self.l2 = L.Convolution2D(3, 3, 3, pad=1)
@@ -160,6 +161,8 @@ def main():
   for episode in range(args.episodes):
 
     obs = env.reset()
+    print(('#' * 9 + ' ') * 3)
+    for row in sce.format_field(obs): print(row)
     done = False
     R = 0.0  # Return (sum of rewards obtained in an episode)
     timestep = 0
@@ -181,6 +184,8 @@ def main():
         action = random.sample([0, 1], 1)[0]
       else:
         action = get_greedy_action(Q, obs)
+      print('#' * 9)
+      print(action)
 
       # Execute an action
       new_obs, reward, done, _ = env.step(action)

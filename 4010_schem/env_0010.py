@@ -1,4 +1,5 @@
 import schemedit as sce
+import numpy as np
 
 def radix2(length, n):
   retval = []
@@ -21,9 +22,9 @@ schem = \
 
 class MyEnv():
 
-  def __init__(self):
-    retval = reset(self):
-    return retval
+  #def __init__(self):
+  #  retval = self.reset()
+  #  return retval
 
   def reset(self):
     self.state = \
@@ -33,24 +34,24 @@ class MyEnv():
     return np.moveaxis(np.array(self.state), 2, 0)
 
   def step(self, action):
-    command = []
-    command.append(action % 9)
+    cmd = []
+    cmd.append(action % 9)
     action //= 9
-    command.append(action % 10)
+    cmd.append(action % 10)
     action //= 10
-    command.append(action % 10)
+    cmd.append(action % 10)
     action //= 10
     if action == 2:
-      done = True:
+      done = True
     elif action == 1: # move_x
-      done = False:
-      if command[1] <= command[0]:
-        command[0] += 1
+      done = False
+      if cmd[1] <= cmd[0]:
+        cmd[0] += 1
       new_state = sce.move_x(self.state, cmd[2:0:-1], cmd[0])
     elif action == 0: # move-y
-      done = False:
-      if command[2] <= command[0]:
-        command[0] += 1
+      done = False
+      if cmd[2] <= cmd[0]:
+        cmd[0] += 1
       new_state = sce.move_y(self.state, cmd[2:0:-1], cmd[0])
     old_n_corner_cross = self.n_corner_cross
     if new_state:

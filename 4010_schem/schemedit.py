@@ -7,7 +7,7 @@ def format_field(ar):
     acc += ar[i] * 2**i
   sacc = []
   for i in range(ar.shape[1]):
-    line = ','.join(['  ' if x == 0 else '{:02X}'.format(int(x))
+    line = ''.join(['  ' if x == 0 else '{:02X}'.format(int(x))
                     for x in acc[i]])
     sacc.append(line)
   return sacc
