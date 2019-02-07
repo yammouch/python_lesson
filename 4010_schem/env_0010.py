@@ -8,16 +8,16 @@ def radix2(length, n):
   return retval
 
 schem = \
-[ '  ,  ,  ,  ,  ,  ,  ,  ,  ,  ' ,
-  '0A,02,02,02,  ,  ,  ,  ,  ,  ' ,
-  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
-  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
-  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
-  '  ,  ,  ,  ,01,  ,  ,  ,  ,  ' ,
-  '  ,03,02,02,03,02,20,  ,02,10' ,
-  '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
-  '  ,01,  ,  ,01,  ,  ,  ,  ,  ' ,
-  '  ,02,02,02,  ,  ,  ,  ,  ,  ' ]
+[ '                    ' ,
+  '0A020202            ' ,
+  '        01          ' ,
+  '        01          ' ,
+  '        01          ' ,
+  '        01          ' ,
+  '  030202030220  0210' ,
+  '  01    01          ' ,
+  '  01    01          ' ,
+  '  020202            ' ]
 
 class MyEnv():
 
@@ -27,13 +27,12 @@ class MyEnv():
 
   def reset(self):
     self.state = \
-    [ [radix2(6, int('0' + cell, 16)) for cell in row.split(',')]
+    [ [radix2(6, int('0' + row[i*2:(i+1)*2], 16)) for i in range(10)]
       for row in schem ]
+    self.n_corner_cross = sce.count_corner_cross(self.state)
     return np.moveaxis(np.array(self.state), 2, 0)
 
   def step(self, action):
-    reward = 0
-    ### 'reward' is to be programmed.
     command = []
     command.append(action % 9)
     action //= 9
@@ -47,10 +46,15 @@ class MyEnv():
       done = False:
       if command[1] <= command[0]:
         command[0] += 1
-      self.state = sce.move_x(self.state, cmd[2:0:-1], cmd[0])
+      new_state = sce.move_x(self.state, cmd[2:0:-1], cmd[0])
     elif action == 0: # move-y
       done = False:
       if command[2] <= command[0]:
         command[0] += 1
-      self.state = sce.move_y(self.state, cmd[2:0:-1], cmd[0])
+      new_state = sce.move_y(self.state, cmd[2:0:-1], cmd[0])
+    old_n_corner_cross = self.n_corner_cross
+    if new_state:
+      self.state = new_state
+      self.n_corner_cross = sce.count_corner_cross(self.state)
+    reward = 1 if self.n_corner_cross < old_n_corner_cross else 0
     return np.moveaxis(np.array(self.state), 2, 0), reward, done, None
