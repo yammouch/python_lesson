@@ -38,6 +38,14 @@ def decode1(n, str):
 def decode(n, strs):
   return [decode1(n, str) for str in strs]
 
+def encode1(row):
+  return ''.join(['  ' if all([b == 0 for b in cell]) else
+                  '{:02X}'.format(radix_inv(2, cell))
+                  for cell in row])
+
+def encode(field):
+  return "\n".join([encode1(row) for row in field])
+  
 def mapd(d, f, s):
   if d <= 0:
     return f(s)
@@ -322,6 +330,7 @@ if sce.move_y(field, [1, 4], 4) == ex1:
 else:
   print('[ER]', end='')
 print(' move_y')
+print(encode(sce.move_y(field, [0, 0], 1)))
 
 if sce.count_corner_cross(field) == 4:
   print('[OK]', end='')
