@@ -63,10 +63,6 @@ def update(Q, target_Q, opt, samples, gamma=0.99, target_type='double_dqn'):
   done = xp.asarray([sample[3] for sample in samples], dtype=np.float32)
   obs_next = xp.asarray([sample[4] for sample in samples], dtype=np.float32)
   # Predicted values: Q(s,a)
-  #print('### Q(obs) = ')
-  #print(Q(obs))
-  #print('### action = ')
-  #print(action)
   y = F.select_item(Q(obs), action)
   # Target values: r + gamma * max_b Q(s',b)
   with chainer.no_backprop_mode():
@@ -184,8 +180,6 @@ def main():
         action = random.sample([0, 1], 1)[0]
       else:
         action = get_greedy_action(Q, obs)
-      print('#' * 9)
-      print(action)
 
       # Execute an action
       new_obs, reward, done, _ = env.step(action)
@@ -211,7 +205,7 @@ def main():
     Rs.append(R)
     average_R = np.mean(Rs)
     print('episode: {} iteration: {} R: {} average_R: {}'.format(
-        episode, iteration, R, average_R))
+          episode, iteration, R, average_R))
 
     if reward_threshold is not None and average_R >= reward_threshold:
       print('Solved {} by getting average reward of '
@@ -219,8 +213,12 @@ def main():
                 args.env, average_R, reward_threshold))
       break
 
-  print(Q.l0.W)
-  print(Q.l0.b)
+  #print(Q.l1.W)
+  #print(Q.l1.b)
+  #print(Q.l2.W)
+  #print(Q.l2.b)
+  #print(Q.l3.W)
+  #print(Q.l3.b)
 
 
 if __name__ == '__main__':
