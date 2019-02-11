@@ -221,12 +221,16 @@ def shave(from_p, to, d, field):
 def move_element(field, from_p, d, to):
   to_p = copy.copy(from_p)
   to_p[d] = to
-  from_el = field[from_p[0]][from_p[1]][3:]
-  to_el   = field[to_p  [0]][to_p  [1]][3:]
+ #from_el = field[from_p[0]][from_p[1]][3:]
+  from_el = field[from_p[0]][from_p[1]][3:5]
+ #to_el   = field[to_p  [0]][to_p  [1]][3:]
+  to_el   = field[to_p  [0]][to_p  [1]][3:5]
   if all([x == 0 for x in to_el]):
     fld = copy.deepcopy(field)
-    fld[to_p  [0]][to_p  [1]][3:] = from_el
-    fld[from_p[0]][from_p[1]][3:] = [0] * (len(fld[0][0]) - 3)
+   #fld[to_p  [0]][to_p  [1]][3:] = from_el
+    fld[to_p  [0]][to_p  [1]][3:5] = from_el
+   #fld[from_p[0]][from_p[1]][3:] = [0] * (len(fld[0][0]) - 3)
+    fld[from_p[0]][from_p[1]][3:5] = [0] * 2
     return fld
 
 def move_x(field, from_p, to):
@@ -235,7 +239,7 @@ def move_x(field, from_p, to):
   traced = trace(field, y, x, 0)
   d, dop = ('r', 'l') if x < to else ('l', 'r')
   fld = move_element(field, from_p, 1, to)
-  fld = reach([y0, to], dop, traced, fld)
+  fld = reach([y0, to], dop, traced, fld) if fld else None
   fld = reach([y1, to], dop, *fld) if fld else None
   fld = stumble([y0, to], y1, 0, *fld) if fld else None
   fld = debridge([y0, x], y1, 0, fld[1]) if fld else None
@@ -249,7 +253,11 @@ def move_y(field, from_p, to):
   traced = trace(field, y, x, 1)
   d, dop = ('d', 'u') if y < to else ('u', 'd')
   fld = move_element(field, from_p, 0, to)
-  fld = reach([to, x0], dop, traced, fld)
+  #for row in fld:
+  #for row in field:
+  #  print(''.join(['  ' if x == 0 else
+  #                 '{:02X}'.format(radix2_inx(x)) for x in row]))
+  fld = reach([to, x0], dop, traced, fld) if fld else None
   fld = reach([to, x1], dop, *fld) if fld else None
   fld = stumble([to, x0], x1, 1, *fld) if fld else None
   fld = debridge([y, x0], x1, 1, fld[1]) if fld else None
