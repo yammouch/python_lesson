@@ -6,7 +6,7 @@ for i in range(0xFE):
   p2b[i+1] = shifted ^ 0x71 if p2b[i] & (1 << 7) else shifted
 
 b2p = [0] * 0x100
-b2p[0xFF] = 0
+b2p[0] = 0xFF
 for i in range(0xFF):
   b2p[p2b[i]] = i
 
@@ -40,9 +40,9 @@ def assign(p, x):
 # (x + 1)(x + a)
 # = x^2 + (a + 1)x + a
 def encode(l):
-  a = l + [0xFF] * 2
+  a = l[:] + [0xFF] * 2
   divp_inplace(a, [b2p[x] for x in [0x01, 0x03, 0x02]])
-  return a
+  return l[:] + a[-2:]
 
 def syndrome(l):
   return [assign(l, x) for x in range(1, -1, -1)]
