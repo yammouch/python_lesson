@@ -26,6 +26,22 @@ def divc(n, d):
 
 def divp_inplace(n, d):
   for i in range(len(n)-len(d)+1):
-    q = divc(n[i], d[i])
+    n[i] = divc(n[i], d[i])
     for j in range(1, len(d)):
-      n[i+j] = addc(n[i+j], mulc(d[i+j], q))
+      n[i+j] = addc(n[i+j], mulc(d[i+j], n[i]))
+
+def assign(p, x):
+  acc = 0xFF
+  for c in p:
+    acc = addc(mulc(x, acc), c)
+  return acc
+
+# (x + 1)(x + a)
+# = x^2 + (a + 1)x + a
+def rs_encode(l):
+  a = l + [0xFF] * 2
+  divp_inplace(a, [b2p(x) for x in [0x01, 0x03, 0x02]])
+  return a
+
+def syndrome(l):
+  return [assign(l, x) for x in range(1, -1, -1)]
