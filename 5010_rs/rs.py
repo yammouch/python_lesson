@@ -32,6 +32,14 @@ def divp_inplace(n, d):
       n[i+j] = addc(n[i+j], mulc(d[j], n[i]))
     #print(' '.join('{:02X}'.format(x) for x in n))
 
+def remp(n, d):
+  a = n[:]
+  divp_inplace(a, d)
+  i = len(n) - len(d) + 1
+  while i < len(a) and a[i] == 0xFF:
+    i += 1
+  return a[i:]
+
 def assign(p, x):
   acc = 0xFF
   for c in p:
@@ -47,3 +55,11 @@ def encode(l):
 
 def syndrome(l):
   return [assign(l, x) for x in range(1, -1, -1)]
+
+def gcd(p1, p2):
+  while p2:
+    print(' '.join('{:02X}'.format(x) for x in p1))
+    r = remp(p1, p2)
+    p1 = p2
+    p2 = r
+  return p1
