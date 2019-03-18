@@ -27,9 +27,10 @@ def divc(n, d):
 
 def divp_inplace(n, d):
   for i in range(len(n)-len(d)+1):
-    n[i] = divc(n[i], d[i])
+    n[i] = divc(n[i], d[0])
     for j in range(1, len(d)):
       n[i+j] = addc(n[i+j], mulc(d[j], n[i]))
+    #print(' '.join('{:02X}'.format(x) for x in n))
 
 def assign(p, x):
   acc = 0xFF
