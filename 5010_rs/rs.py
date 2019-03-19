@@ -90,5 +90,10 @@ def euc(p1, p2):
           addp(m[0], mulp(m[1], q)) ,
           m[3]                      ,
           addp(m[2], mulp(m[3], q)) ]
+    print('[p1]: ' + ' '.join('{:02X}'.format(x) for x in p1))
+    print('[p2]: ' + ' '.join('{:02X}'.format(x) for x in p2))
+    print('[q ]: ' + ' '.join('{:02X}'.format(x) for x in q ))
+    print('[r ]: ' + ' '.join('{:02X}'.format(x) for x in r ))
+    print('[m ]: ' + ','.join(' '.join('{:02X}'.format(x) for x in p) for p in m))
     p1 = p2; p2 = r
   return m[3], r
