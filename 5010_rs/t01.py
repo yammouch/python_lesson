@@ -18,6 +18,9 @@ enc[0] = 1
 syn = rs.syndrome(enc)
 print(' '.join(['{:02X}'.format(x) for x in syn]))
 
+# 00:01 FF:00 FF:00 / EB:30 E7:03 -> 14:0D -> 00:01 FB:17
+#       FB:17 FF:00               -> 10:F3 -> FB:17 F7:64
+#             F7:64
 qp, r = rs.euc([0x00] + [0xFF] * 2, syn)
 print(' '.join(['{:02X}'.format(x) for x in qp]))
 print(' '.join(['{:02X}'.format(x) for x in r ]))
