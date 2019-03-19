@@ -25,5 +25,5 @@ qp, r = rs.euc([0x00] + [0xFF] * 2, syn)
 print(' '.join(['{:02X}'.format(x) for x in qp]))
 print(' '.join(['{:02X}'.format(x) for x in r ]))
 
-pos = [rs.assign(qp, x) for x in range(len(enc))]
+pos = [rs.assign(qp, (0xFF-x)%0xFF) for x in range(len(enc))]
 print(' '.join(['{:02X}'.format(x) for x in pos]))

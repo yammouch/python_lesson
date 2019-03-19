@@ -83,7 +83,7 @@ def mulp(p1, p2):
 # [m0 m1] [ 0 1 ]
 # [m2 m3] [ 1 q ]
 def euc(p1, p2):
-  m = [[], [], [], []]
+  m = [[0], [], [], [0]]
   while 1 < len(p2):
     q, r = divp(p1, p2)
     m = [ m[1]                      , 
