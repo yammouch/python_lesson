@@ -18,8 +18,9 @@ enc[0] = 1
 syn = rs.syndrome(enc)
 print(' '.join(['{:02X}'.format(x) for x in syn]))
 
-gcd = rs.gcd([0x00] + [0xFF] * 2, syn)
-print(' '.join(['{:02X}'.format(x) for x in gcd]))
+qp, r = rs.euc([0x00] + [0xFF] * 2, syn)
+print(' '.join(['{:02X}'.format(x) for x in qp]))
+print(' '.join(['{:02X}'.format(x) for x in r ]))
 
-pos = [rs.assign(gcd, x) for x in range(len(enc))]
+pos = [rs.assign(qp, x) for x in range(len(enc))]
 print(' '.join(['{:02X}'.format(x) for x in pos]))

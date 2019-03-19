@@ -40,6 +40,14 @@ def remp(n, d):
     i += 1
   return a[i:]
 
+def divp(n, d):
+  a = n[:]
+  divp_inplace(a, d)
+  i = len(n) - len(d) + 1
+  while i < len(a) and a[i] == 0xFF:
+    i += 1
+  return a[0:len(n) - len(d) + 1], a[i:]
+
 def assign(p, x):
   acc = 0xFF
   for c in p:
@@ -56,10 +64,31 @@ def encode(l):
 def syndrome(l):
   return [assign(l, x) for x in range(1, -1, -1)]
 
-def gcd(p1, p2):
-  while p2:
-    print(' '.join('{:02X}'.format(x) for x in p1))
-    r = remp(p1, p2)
-    p1 = p2
-    p2 = r
-  return p1
+def addp(p1, p2):
+  retval = None; l = None; s = None
+  if len(p1) < len(p2): l = p2; s = p1
+  else:                 l = p1; s = p2
+  retval = l[:]
+  for i in range(len(s)):
+    retval[-1-i] = addc(retval[-1-i], s[-1-i])
+  return retval
+
+def mulp(p1, p2):
+  retval = [0xFF] * (len(p1) + len(p2) - 1)
+  for i in range(len(p1)):
+    for j in range(len(p2)):
+      retval[i+j] = addc(retval[i+j], mulc(p1[i], p2[j]))
+  return retval
+
+# [m0 m1] [ 0 1 ]
+# [m2 m3] [ 1 q ]
+def euc(p1, p2):
+  m = [[], [], [], []]
+  while 1 < len(p2):
+    q, r = divp(p1, p2)
+    m = [ m[1]                      , 
+          addp(m[0], mulp(m[1], q)) ,
+          m[3]                      ,
+          addp(m[2], mulp(m[3], q)) ]
+    p1 = p2; p2 = r
+  return m[3], r
