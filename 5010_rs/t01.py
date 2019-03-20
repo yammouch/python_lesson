@@ -14,7 +14,7 @@ print(' '.join(['{:02X}'.format(x) for x in rs.remp([0, 1, 2, 0xFF, 0xFF], [0x00
 syn = rs.syndrome(enc)
 print(' '.join(['{:02X}'.format(x) for x in syn]))
 
-enc[0] = 1
+enc[1] = 0
 syn = rs.syndrome(enc)
 print(' '.join(['{:02X}'.format(x) for x in syn]))
 
@@ -23,8 +23,8 @@ print(' '.join(['{:02X}'.format(x) for x in syn]))
 #             F7:64
 qp, r = rs.euc([0x00] + [0xFF] * 2, syn)
 qp_d = qp[0:-1]
-for i in range((len(qp_d)+1)//2): 
-  qp_d[-1-i*2] = 0xFF
+for i in range(len(qp_d)//2): 
+  qp_d[-i*2] = 0xFF
 print(' '.join(['{:02X}'.format(x) for x in qp  ]))
 print(' '.join(['{:02X}'.format(x) for x in r   ]))
 print(' '.join(['{:02X}'.format(x) for x in qp_d]))
