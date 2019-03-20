@@ -22,8 +22,15 @@ print(' '.join(['{:02X}'.format(x) for x in syn]))
 #       FB:17 FF:00               -> 10:F3 -> FB:17 F7:64
 #             F7:64
 qp, r = rs.euc([0x00] + [0xFF] * 2, syn)
-print(' '.join(['{:02X}'.format(x) for x in qp]))
-print(' '.join(['{:02X}'.format(x) for x in r ]))
+qp_d = qp[0:-1]
+for i in range((len(qp_d)+1)//2): 
+  qp_d[-1-i*2] = 0xFF
+print(' '.join(['{:02X}'.format(x) for x in qp  ]))
+print(' '.join(['{:02X}'.format(x) for x in r   ]))
+print(' '.join(['{:02X}'.format(x) for x in qp_d]))
 
-pos = [rs.assign(qp, (0xFF-x)%0xFF) for x in range(len(enc))]
+pos = [rs.assign(qp,   (0xFF-x)%0xFF) for x in range(len(enc))]
+val = [rs.assign(qp_d, (0xFF-x)%0xFF) for x in range(len(enc))]
 print(' '.join(['{:02X}'.format(x) for x in pos]))
+print(' '.join(['{:02X}'.format(x) for x in val]))
+
