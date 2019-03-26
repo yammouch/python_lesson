@@ -14,7 +14,7 @@ print(' '.join(['{:02X}'.format(x) for x in rs.remp([0, 1, 2, 0xFF, 0xFF], [0x00
 syn = rs.syndrome(enc)
 print(' '.join(['{:02X}'.format(x) for x in syn]))
 
-enc[1] = 0
+enc[0] = 1
 syn = rs.syndrome(enc)
 print(' '.join(['{:02X}'.format(x) for x in syn]))
 
@@ -29,8 +29,10 @@ print(' '.join(['{:02X}'.format(x) for x in qp  ]))
 print(' '.join(['{:02X}'.format(x) for x in r   ]))
 print(' '.join(['{:02X}'.format(x) for x in qp_d]))
 
-pos = [rs.assign(qp,   (0xFF-x)%0xFF) for x in range(len(enc))]
-val = [rs.assign(qp_d, (0xFF-x)%0xFF) for x in range(len(enc))]
+pos = [rs.assign(qp, rs.divc(0x00, x)) for x in range(len(enc))]
+val = [rs.divc(rs.mulc(rs.assign(r, rs.divc(0x00, x)), x),
+               rs.assign(qp_d, rs.divc(0x00, x)))
+       for x in range(len(enc))]
 print(' '.join(['{:02X}'.format(x) for x in pos]))
 print(' '.join(['{:02X}'.format(x) for x in val]))
 
