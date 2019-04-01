@@ -1,21 +1,37 @@
+import copy
+
 #(ns mlp.meander
 #  (:require [mlp.util :as utl]
 #            [mlp.schemprep :as smp]
 #            [mlp.schemmlp  :as scp]
 #            [clojure.pprint]))
 
-#(defn range-2d [end from to o]
-#  (let [o (case o (:u :d) 0, (:l :r) 1, 0 0, 1 1)
-#        q (from o)
-#        to (if (vector? to) (to o) to)]
-#    (->> (apply range (if (< to q) [(+ q end -1) (- to 1) -1] [q (+ to end)]))
-#         (map (partial assoc from o)))))
+def range_2d(end, from_p, to, o):
+  if o in {'u', 'd'}:
+    o = 0
+  elif o in {'l', 'r'}:
+    o = 1
+  q = from_p[o]
+  if not type(to) is int:
+    to = to[o]
+  if to < q:
+    a = range(q + end - 1, to - 1, -1)
+  else:
+    a = range(q, to + end)
+  retval = []
+  for x in a:
+    p = from_p[:]
+    p[o] = x
+    retval.append(p)
+  return retval
 
-#(defn range-n [from to o] (range-2d 0 from to o))
+def range_n(from_p, to, o):
+  return range_2d(0, from_p, to, o)
 
-#(defn line [field from to o]
-#  (reduce (fn [fld [y x]] (assoc-in fld [y x o] 1))
-#          field (range-n from to o)))
+def line(field, from_p, to, o):
+  fld = copy.deepcopy(field)
+  for y, x for range_n(from_p, to, o):
+    fld[y][x][o] = 1
 
 #(defn lines [field from tos]
 #  (loop [fld field, from from, [[p o] & ts :as tos] tos]
