@@ -33,6 +33,9 @@ def line(field, from_p, to, o):
   for y, x for range_n(from_p, to, o):
     fld[y][x][o] = 1
 
+def lines(field, from_p, tos):
+  fld = copy.deepcopy(field)
+
 #(defn lines [field from tos]
 #  (loop [fld field, from from, [[p o] & ts :as tos] tos]
 #    (if (empty? tos)
