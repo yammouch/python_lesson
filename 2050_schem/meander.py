@@ -35,12 +35,10 @@ def line(field, from_p, to, o):
 
 def lines(field, from_p, tos):
   fld = copy.deepcopy(field)
-
-#(defn lines [field from tos]
-#  (loop [fld field, from from, [[p o] & ts :as tos] tos]
-#    (if (empty? tos)
-#      fld
-#      (recur (line fld from p o) p ts))))
+  frm = from_p
+  for i in range(len(tos)):
+    line(fld, frm, tos[i][0], tos[i][1])
+    frm = tos[i][0]
 
 #(defn add-elements [field els]
 #  (reduce (fn [fld [p d]]
