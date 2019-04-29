@@ -1,0 +1,1 @@
+cmd_/home/yammouch/src/driver/hello.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/yammouch/src/driver/hello.ko /home/yammouch/src/driver/hello.o /home/yammouch/src/driver/hello.mod.o ;  true
