@@ -156,33 +156,35 @@ def ring_0_1(size, l):
          'dst': p1[1]}
   return {'field': fld, 'cmd': cmd}
 
-#(defn ring-0-2 [[h w] l]
-#  (let [[p0 p1 _ _ _ p5 p6 p7] (ring-0-points l)]
-#   {:field
-#    (as-> (reduce #(vec (repeat %2 %1)) 0 [6 w h]) fld
-#          (add-elements fld [[p0 3] [p5 5] [p7 4]])
-#          (lines fld p0 [[p1 1] [[(p5 0) (p1 1)] 0] [p5 1]])
-#          (line fld p6 (p7 1) 1))
-#    :cmd {:cmd :move-y
-#          :org p0
-#          :dst (p5 0)}}))
+def ring_0_2(size, l):
+  p0, p1, _, _, _, p5, p6, p7 = ring_0_points(l)
+  fld = [ [ [0] * 6 for _ in range(size[1]) ]
+            for _ in range(size[0]) ]
+  fld = add_elements(fld, [[p0, 3], [p5, 5], [p7, 4]])
+  fld = lines(fld, p0, [[p1, 1], [[p5[0], p1[1]], 0], [p5, 1]])
+  fld = line(fld, p6, p7[1], 1)
+  cmd = {'cmd': 'move-y',
+         'org': p0,
+         'dst': p5[0]}
+  return {'field': fld, 'cmd': cmd}
 
-#(def ring-0 (juxt ring-0-0 ring-0-1 ring-0-2))
+def ring_0(size, l):
+  return [ring_0_0(size, l), ring_0_1(size, l), ring_0_2(size, l)]
 
-#;    |<-  l0  ->|  |<- l1 ->|
-#;
-#;   _           |\         p3
-#;  |_>----------| >o--------+  -
-#;     p0      p1|/  p2      |  ^
-#;                           |  l2
-#;                           |  v   p7 _
-#;                  p6+------+--------|_>
-#;                    |      |  ^
-#;                    |      |  l3
-#;                    |    p4|  v
-#;                  p5+------+  -
-#;
-#;                    |<-l4->|<- l5 ->|
+#    |<-  l0  ->|  |<- l1 ->|
+#
+#   _           |\         p3
+#  |_>----------| >o--------+  -
+#     p0      p1|/  p2      |  ^
+#                           |  l2
+#                           |  v   p7 _
+#                  p6+------+--------|_>
+#                    |      |  ^
+#                    |      |  l3
+#                    |    p4|  v
+#                  p5+------+  -
+#
+#                    |<-l4->|<- l5 ->|
 
 #(defn ring-1-points [l]
 #  (let [y0 (+ (l 2) (l 3))
