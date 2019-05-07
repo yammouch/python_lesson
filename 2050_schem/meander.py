@@ -72,10 +72,10 @@ def meander_0_points(l):
   p7 = [ p6[0]       , p6[1] + l[5] ]
   return [y0, p0, p1, p2, p3, p4, p5, p6, p7]
 
-def meander_0_0(p, l):
+def meander_0_0(size, l):
   y0, p0, p1, p2, p3, p4, p5, p6, p7 = meander_0_points(l)
-  fld = [ [ [0] * 6 for _ in range(w) ]
-            for _ in range(h) ]
+  fld = [ [ [0] * 6 for _ in range(size[1]) ]
+            for _ in range(size[0]) ]
   fld = add_elements(fld, [[p0, 3], [p5, 5], [p7, 4]])
   fld = lines(fld, p0, [[p1, 1], [p2, 0], [p3, 1], [p4, 0], [p5, 1]])
   fld = line(fld, p6, p7[1], 1)
@@ -84,17 +84,18 @@ def meander_0_0(p, l):
          'dst': p3[1]}
   return {'field': fld, 'cmd': cmd}
 
-#(defn meander-0-1 [[h w] l]
-#  (let [[y0 p0 _ _ _ p4 p5 p6 p7] (meander-0-points l)]
-#   {:field
-#    (as-> (reduce #(vec (repeat %2 %1)) 0 [6 w h]) fld
-#          (add-elements fld [[p0 3] [p5 5] [p7 4]])
-#          (line fld   p0            (p4 1) 1)
-#          (lines fld [(p0 0) (p4 1)] [[p4 0] [p5 1]])
-#          (line fld p6 (p7 1) 1))
-#    :cmd {:cmd :move-y
-#          :org p0
-#          :dst (p4 0)}}))
+def meander_0_1(p, l):
+  y0, p0, _, _, _, p4, p5, p6, p7 = meander_0_points(l)
+  fld = [ [ [0] * 6 for _ in range(size[1]) ]
+            for _ in range(size[0]) ]
+  fld = add_elements(fld, [[p0, 3], [p5, 5], [p7, 4]])
+  fld = line(fld, p0, p4[1], 1)
+  fld = lines(fld, [p0[0], p4[1]], [[p4, 0], [p5, 1]])
+  fld = line(fld, p6, p7[1], 1)
+  cmd = {'cmd': 'move-y',
+         'org': p0
+         'dst': p4[0]}
+  return {'field': fld, 'cmd': cmd}
 
 #(def meander-0 (juxt meander-0-0 meander-0-1))
 
