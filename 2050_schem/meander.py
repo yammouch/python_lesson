@@ -1,10 +1,7 @@
 import copy
-
-#(ns mlp.meander
-#  (:require [mlp.util :as utl]
-#            [mlp.schemprep :as smp]
-#            [mlp.schemmlp  :as scp]
-#            [clojure.pprint]))
+import schemprep as smp
+import schemmlp as scp
+import util as utl
 
 def range_2d(end, from_p, to, o):
   if o in {'u', 'd'}:
@@ -84,7 +81,7 @@ def meander_0_0(size, l):
          'dst': p3[1]}
   return {'field': fld, 'cmd': cmd}
 
-def meander_0_1(p, l):
+def meander_0_1(size, l):
   y0, p0, _, _, _, p4, p5, p6, p7 = meander_0_points(l)
   fld = [ [ [0] * 6 for _ in range(size[1]) ]
             for _ in range(size[0]) ]
@@ -97,29 +94,30 @@ def meander_0_1(p, l):
          'dst': p4[0]}
   return {'field': fld, 'cmd': cmd}
 
-#(def meander-0 (juxt meander-0-0 meander-0-1))
+def meander_0(size, l):
+  return [meander_0_0(size, l), meander_0_1(size, l)]
 
-#(defn meander-pos [n]
-#  (let [m (vec (meander-0 [14 14] [4 2 2 2 4 2]))
-#        [u d l r] (smp/room (get-in m [0 :field]))
-#        _ (println [u d l r])
-#        ml (for [dy (range (- u) (+ d 1)) dx (range (- l) (+ r 1))]
-#             [dy dx])
-#        [ml] (utl/select (vec ml) [n] (utl/xorshift 2 4 6 8))]
-#    (mapv (partial scp/slide-history m) ml)))
+def meander_pos(n):
+  m = meander_0([14, 14], [4, 2, 2, 2, 4, 2])
+  u, d, l, r = smp.room(m[0]["field"]
+  print([u, d, l, r])
+  ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
+  ml = utl.select(ml, [n], utl.xorshift(2, 4, 6, 8)
+  ml = ml[0]
+  return [scp.slide_history(m, ml) for x in ml]
 
-#;    |<-  l0  ->|
-#;   _            p1
-#;  |_>----------+  -
-#;    p0         |  ^
-#;               |  l1
-#;     p4        |  v     |\            _
-#;      +--------+--------| >o---------|_>
-#;      |<- l3 ->|  ^   p5|/  p6     p7
-#;      |        |  l2
-#;      |p3    p2|  v
-#;      +--------+
-#;                <- l4 ->    <- l5 ->
+#    |<-  l0  ->|
+#   _            p1
+#  |_>----------+  -
+#    p0         |  ^
+#               |  l1
+#     p4        |  v     |\            _
+#      +--------+--------| >o---------|_>
+#      |<- l3 ->|  ^   p5|/  p6     p7
+#      |        |  l2
+#      |p3    p2|  v
+#      +--------+
+#                <- l4 ->    <- l5 ->
 
 #(defn ring-0-points [l]
 #  (let [y0 (+ (l 1) (l 2))
