@@ -144,16 +144,17 @@ def ring_0_0(size, l):
          'dst': p4[0]}
   return {'field': fld, 'cmd': cmd}
 
-#(defn ring-0-1 [[h w] l]
-#  (let [[p0 p1 _ _ p4 p5 p6 p7] (ring-0-points l)]
-#   {:field
-#    (as-> (reduce #(vec (repeat %2 %1)) 0 [6 w h]) fld
-#          (add-elements fld [[p0 3] [p5 5] [p7 4] [[(p4 0) (p1 1)] 2]])
-#          (lines fld p0 [[p1 1] [p4 0] [p5 1]])
-#          (line fld p6 (p7 1) 1))
-#    :cmd {:cmd :move-x
-#          :org p4
-#          :dst (p1 1)}}))
+def ring_0_1(size, l):
+  p0, p1, _, _, p4, p5, p6, p7 = ring_0_points(l)
+  fld = [ [ [0] * 6 for _ in range(size[1]) ]
+            for _ in range(size[0]) ]
+  fld = add_elements(fld, [[p0, 3], [p5, 5], [p7, 4], [[p4[0], p1[1]], 2]])
+  fld = lines(fld, p0, [[p1, 1], [p4, 0], [p5, 1]])
+  fld = line(fld, p6, p7[1], 1)
+  cmd = {'cmd': 'move-x',
+         'org': p4,
+         'dst': p1[1]}
+  return {'field': fld, 'cmd': cmd}
 
 #(defn ring-0-2 [[h w] l]
 #  (let [[p0 p1 _ _ _ p5 p6 p7] (ring-0-points l)]
