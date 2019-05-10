@@ -27,7 +27,7 @@ def range_n(from_p, to, o):
 
 def line(field, from_p, to, o):
   fld = copy.deepcopy(field)
-  for y, x for range_n(from_p, to, o):
+  for y, x in range_n(from_p, to, o):
     fld[y][x][o] = 1
 
 def lines(field, from_p, tos):
@@ -77,7 +77,7 @@ def meander_0_0(size, l):
   fld = lines(fld, p0, [[p1, 1], [p2, 0], [p3, 1], [p4, 0], [p5, 1]])
   fld = line(fld, p6, p7[1], 1)
   cmd = {'cmd': 'move-x',
-         'org': [(p1[0] + p2[0]) // 2, p1[1]]
+         'org': [(p1[0] + p2[0]) // 2, p1[1]],
          'dst': p3[1]}
   return {'field': fld, 'cmd': cmd}
 
@@ -90,7 +90,7 @@ def meander_0_1(size, l):
   fld = lines(fld, [p0[0], p4[1]], [[p4, 0], [p5, 1]])
   fld = line(fld, p6, p7[1], 1)
   cmd = {'cmd': 'move-y',
-         'org': p0
+         'org': p0,
          'dst': p4[0]}
   return {'field': fld, 'cmd': cmd}
 
@@ -99,7 +99,7 @@ def meander_0(size, l):
 
 def meander_pos(n):
   m = meander_0([14, 14], [4, 2, 2, 2, 4, 2])
-  u, d, l, r = smp.room(m[0]["field"]
+  u, d, l, r = smp.room(m[0]["field"])
   print([u, d, l, r])
   ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
   ml = utl.select(ml, [n], utl.xorshift(2, 4, 6, 8))
@@ -140,7 +140,7 @@ def ring_0_0(size, l):
   fld = lines(fld, p0, [[p1, 1], [p2, 0], [p3, 1], [p4, 0], [p5, 1]])
   fld = line(fld, p6, p7[1], 1)
   cmd = {'cmd': 'move-y',
-         'org': [p2[0], (p2[1] + p3[1])//2
+         'org': [p2[0], (p2[1] + p3[1])//2],
          'dst': p4[0]}
   return {'field': fld, 'cmd': cmd}
 
@@ -208,7 +208,7 @@ def ring_1_0(size, l):
   fld = line(fld, p0, p1[1], 1)
   fld = lines(fld, p2, [[p3, 1], [p4, 0], [p5, 1], [p6, 0], [p7, 1]])
   cmd = {'cmd': 'move-y',
-         'org': [p4[0], (p4[1] + p5[1])//2]
+         'org': [p4[0], (p4[1] + p5[1])//2],
          'dst': p6[0]}
   return {'field': fld, 'cmd': cmd}
 
@@ -220,7 +220,7 @@ def ring_1_1(size, l):
   fld = line(fld, p0, p1[1], 1)
   fld = lines(fld, p2, [[p3, 1], [p6, 0], [p7, 1]])
   cmd = {'cmd': 'move-x',
-         'org': p6
+         'org': p6,
          'dst': p3[1]}
   return {'field': fld, 'cmd': cmd}
 
@@ -232,7 +232,7 @@ def ring_1_2(size, l):
   fld = line(fld, p0, p1[1], 1)
   fld = lines(fld, p2, [[p3, 1], [[p6[0], p3[1]], 0], [p7, 1]])
   cmd = {'cmd': 'move-y',
-         'org': p7
+         'org': p7,
          'dst': p3[0]}
   return {'field': fld, 'cmd': cmd}
 
@@ -241,7 +241,7 @@ def ring_1(size, l):
 
 def main():
 #  ;(doseq [sequ (ring-0 [14 14] [4 -2 -3 3 2 2])]
-  for sequ ring_1([14, 14], [2, 2, -2, -3, 3, 2]):
+  for sequ in ring_1([14, 14], [2, 2, -2, -3, 3, 2]):
     print(sequ["field"])
 #  ;(doseq [sequ (meander-0 [14 14] [4 2 2 2 4 2])]
 #    (clojure.pprint/pprint
@@ -251,13 +251,13 @@ def main():
 #; lein run -m mlp.t0160-gentr
 
 def position_variation(m, rs):
-  [u d l r] smp.room(m[0]["field"])
+  u, d, l, r = smp.room(m[0]["field"])
   ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
   n = len(ml)
   [mtr, mts] = utl.select(ml, [n-1, 1], rs)
   return [[scp.slide_history(m, x) for x in ml],
  #return [[scp.slide_history(m, x) for x in mtr],
-          [scp.slide_history(m, x) for x in mts]]))
+          [scp.slide_history(m, x) for x in mts]]
 
 #(defn meander-0-geometry-variation [size]
 #  (for [g0 [2]
