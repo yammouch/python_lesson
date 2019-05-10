@@ -250,24 +250,14 @@ def main():
 #    ))
 #; lein run -m mlp.t0160-gentr
 
-#(ns mlp.t0160-gentr
-#  (:gen-class)
-#  (:require [clojure.pprint]
-#            [mlp.util :as utl]
-#            [mlp.schemmlp]
-#            [mlp.schemprep :as spp]
-#            [mlp.meander]))
-
-#(defn position-variation [m rs]
-#  (let [m (vec m)
-#        [u d l r] (spp/room (get-in m [0 :field]))
-#        ml (for [dy (range (- u) (+ d 1)) dx (range (- l) (+ r 1))]
-#             [dy dx])
-#        n (count ml)
-#        [mtr mts] (utl/select (vec ml) [(- n 1) 1] rs)]
-#    ;[(mapv (partial mlp.schemmlp/slide-history m) mtr)
-#    [(mapv (partial mlp.schemmlp/slide-history m) (vec ml))
-#     (mapv (partial mlp.schemmlp/slide-history m) mts)]))
+def position_variation(m, rs):
+  [u d l r] smp.room(m[0]["field"])
+  ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
+  n = len(ml)
+  [mtr, mts] = utl.select(ml, [n-1, 1], rs)
+  return [[scp.slide_history(m, x) for x in ml],
+ #return [[scp.slide_history(m, x) for x in mtr],
+          [scp.slide_history(m, x) for x in mts]]))
 
 #(defn meander-0-geometry-variation [size]
 #  (for [g0 [2]
