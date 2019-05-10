@@ -239,9 +239,10 @@ def ring_1_2(size, l):
 def ring_1(size, l):
   return [ring_1_0(size, l), ring_1_1(size, l), ring_1_2(size, l)]
 
-#(defn -main []
+def main():
 #  ;(doseq [sequ (ring-0 [14 14] [4 -2 -3 3 2 2])]
-#  (doseq [sequ (ring-1 [14 14] [2 2 -2 -3 3 2])]
+  for sequ ring_1([14, 14], [2, 2, -2, -3, 3, 2]):
+    print(sequ["field"])
 #  ;(doseq [sequ (meander-0 [14 14] [4 2 2 2 4 2])]
 #    (clojure.pprint/pprint
 #     (smp/format-field (:field sequ)))
