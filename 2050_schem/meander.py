@@ -210,6 +210,7 @@ def ring_1_0(size, l):
   cmd = {'cmd': 'move-y',
          'org': [p4[0], (p4[1] + p5[1])//2]
          'dst': p6[0]}
+  return {'field': fld, 'cmd': cmd}
 
 def ring_1_1(size, l):
   p0, p1, p2, p3, p4, p5, p6, p7 = ring_1_points(l)
@@ -221,19 +222,22 @@ def ring_1_1(size, l):
   cmd = {'cmd': 'move-x',
          'org': p6
          'dst': p3[1]}
+  return {'field': fld, 'cmd': cmd}
 
-#(defn ring-1-2 [[h w] l]
-#  (let [[p0 p1 p2 p3 p4 p5 p6 p7] (ring-1-points l)]
-#   {:field
-#    (as-> (reduce #(vec (repeat %2 %1)) 0 [6 w h]) fld
-#          (add-elements fld [[p0 3] [p1 5] [p7 4]])
-#          (line fld p0 (p1 1) 1)
-#          (lines fld p2 [[p3 1] [[(p6 0) (p3 1)] 0] [p7 1]]))
-#    :cmd {:cmd :move-y
-#          :org p7
-#          :dst (p3 0)}}))
+def ring_1_2(size, l):
+  p0, p1, p2, p3, p4, p5, p6, p7 = ring_1_points(l)
+  fld = [ [ [0] * 6 for _ in range(size[1]) ]
+            for _ in range(size[0]) ]
+  fld = add_elements(fld, [[p0, 3], [p5, 5], [p7, 4]])
+  fld = line(fld, p0, p1[1], 1)
+  fld = lines(fld, p2, [[p3, 1], [[p6[0], p3[1]], 0], [p7, 1]])
+  cmd = {'cmd': 'move-y',
+         'org': p7
+         'dst': p3[0]}
+  return {'field': fld, 'cmd': cmd}
 
-#(def ring-1 (juxt ring-1-0 ring-1-1 ring-1-2))
+def ring_1(size, l):
+  return [ring_1_0(size, l), ring_1_1(size, l), ring_1_2(size, l)]
 
 #(defn -main []
 #  ;(doseq [sequ (ring-0 [14 14] [4 -2 -3 3 2 2])]
