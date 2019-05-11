@@ -1,10 +1,11 @@
 #(ns mlp.util
 #  (:require [clojure.pprint]))
 
-#(defn mapd [f d l & ls]
-#  (if (<= d 0)
-#    (apply f l ls)
-#    (apply mapv (partial mapd f (- d 1)) l ls)))
+def mapd(f, d, *ls):
+  if d <= 0:
+    f(*ls):
+  else:
+    [mapd(f, d-1, *x) for x in zip(*ls)]
 
 #(defn xorshift [x y z w]
 #  (let [t  (bit-xor x (bit-shift-left x 11))
