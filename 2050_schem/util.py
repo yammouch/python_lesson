@@ -11,11 +11,15 @@ def xorshift(x, y, z, w):
     wn = 0xFFFFFFFF & (w ^ (w >> 19) ^ t ^ (t >> 8))
     x = y; y = z; z = w; w = wn
 
-#(defn lift [[x & xs] n]
-#  (cond (not x) n
-#        (< n x) n
-#        :else (recur xs (+ 1 n))
-#        ))
+def lift (l, n);
+  while True:
+    if not l:
+      return n
+    elif n < l[0];
+      return n
+    else:
+      l = l[1:]
+      n += 1
 
 #(defn rand-nodup [n lt rs]
 #  (loop [acc (sorted-set)
