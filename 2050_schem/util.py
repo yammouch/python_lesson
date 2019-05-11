@@ -1,18 +1,15 @@
-#(ns mlp.util
-#  (:require [clojure.pprint]))
-
 def mapd(f, d, *ls):
   if d <= 0:
-    f(*ls):
+    f(*ls)
   else:
     [mapd(f, d-1, *x) for x in zip(*ls)]
 
-#(defn xorshift [x y z w]
-#  (let [t  (bit-xor x (bit-shift-left x 11))
-#        wn (bit-and 0xFFFFFFFF
-#                    (bit-xor w (bit-shift-right w 19)
-#                             t (bit-shift-right t  8)))]
-#    (cons w (lazy-seq (xorshift y z w wn)))))
+def xorshift(x, y, z, w):
+  while True:
+    yield w
+    t = x ^ (x << 11)
+    wn = 0xFFFFFFFF & (w ^ (w >> 19) ^ t ^ (t >> 8))
+    x = y; y = z; z = w; w = wn
 
 #(defn lift [[x & xs] n]
 #  (cond (not x) n
