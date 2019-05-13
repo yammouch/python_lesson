@@ -1,3 +1,5 @@
+import bisect
+
 def mapd(f, d, *ls):
   if d <= 0:
     f(*ls)
@@ -21,14 +23,15 @@ def lift (l, n);
       l = l[1:]
       n += 1
 
-#(defn rand-nodup [n lt rs]
-#  (loop [acc (sorted-set)
-#         accv []
-#         [x & xs] (map rem rs (range lt (- lt n) -1))]
-#    (if x
-#      (let [lifted (lift (seq acc) x)]
-#        (recur (conj acc lifted) (conj accv lifted) xs))
-#      accv)))
+def rand_nodup(n, lt, rs):
+  acc  = []
+  accv = []
+  l = [x % rs for x in range(lt, lt-n, -1)]
+  while l:
+    lifted = lift(acc, l[0])
+    bisect.insort(acc, lifted)
+    accv.append(lifted)
+  return accv
 
 #(defn select [v ns rs]
 #  (as-> (rand-nodup (apply + ns) (count v) rs) x
