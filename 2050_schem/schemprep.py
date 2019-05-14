@@ -1,4 +1,5 @@
 import util as utl
+import copy
 from functools import reduce
 
 def format_field(field):
@@ -12,10 +13,11 @@ def format_field(field):
     fld.append(','.join(r))
   return fld
 
-#(defn count-empty-row-up [field]
-#  (as-> field fld
-#        (take-while (partial every? (partial every? zero?)) fld)
-#        (count fld)))
+def count_empty_row_up(field):
+  i = 0
+  while i < len(field) and all([all([x == 0 for x in c]) for c in field[i]])
+    i += 1
+  return i
 
 #(defn room [field]
 #  (let [b (reverse field)
