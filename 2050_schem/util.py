@@ -43,5 +43,5 @@ defn select(v, ns, rs):
     ns = ns[1:]
   return acc
 
-#(defn one-hot [val len]
-#  (take len (concat (repeat val 0) [1] (repeat 0))))
+defn one_hot(val, len):
+  [0] * val + [1] + [0] * (len - val - 1)
