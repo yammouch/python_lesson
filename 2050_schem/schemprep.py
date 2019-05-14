@@ -1,17 +1,16 @@
-#(ns mlp.schemprep
-#  (:require [mlp.util :as utl]
-#            [clojure.pprint]))
+import util as utl
+from functools import reduce
 
-#(defn format-field [field]
-#  (mapv (fn [row]
-#          (as-> row r
-#                (map #(as-> (reverse %) c
-#                            (reduce (fn [acc x] (+ (* acc 2) x)) c)
-#                            (if (= c 0) "  " (format "%02X" c)))
-#                     r)
-#                (interpose "," r)
-#                (apply str r)))
-#        field))
+def format_field(field):
+  fld = []
+  for row in field
+    r = []
+    for c in row
+      c = reduce(lambda acc, x: acc*2+x, c[::-1])
+      c = '  ' if c == 0 else '{:02X}'.format(c)
+      r.append(c)
+    fld.append(','.join(r))
+  return fld
 
 #(defn count-empty-row-up [field]
 #  (as-> field fld
