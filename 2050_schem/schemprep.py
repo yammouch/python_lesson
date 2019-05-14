@@ -19,11 +19,11 @@ def count_empty_row_up(field):
     i += 1
   return i
 
-#(defn room [field]
-#  (let [b (reverse field)
-#        l (apply map vector field)
-#        r (reverse l)]
-#    (map count-empty-row-up [field b l r])))
+def room(field):
+  b = field[::-1]
+  l = zip(*field)
+  r = l[::-1]
+  return [count_empty_row_up(x) for x in [field, b, l, r]]
 
 #(defn slide-1d [field n o]
 #  (let [empty (as-> field x
