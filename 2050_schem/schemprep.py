@@ -1,5 +1,5 @@
 import util as utl
-import copy
+from copy import deepcopy
 from functools import reduce
 
 def format_field(field):
@@ -25,20 +25,20 @@ def room(field):
   r = l[::-1]
   return [count_empty_row_up(x) for x in [field, b, l, r]]
 
-#(defn slide-1d [field n o]
-#  (let [empty (as-> field x
-#                    (iterate first x)
-#                    (take-while coll? x)
-#                    (map count x)
-#                    (drop (+ o 1) x)
-#                    (reverse x)
-#                    (reduce #(vec (repeat %2 %1)) 0 x))
-#        fslide (fn [l] (vec (take (count l)
-#                                  (concat (repeat n empty)
-#                                          (drop (- n) l)
-#                                          (repeat empty)))))]
-#    (utl/mapd fslide o field)))
-
+def slide_1d(field, n, o):
+  fld = field
+  d = []
+  while fld[0] is list:
+    d.append(len(fld))
+    fld = fld[0]
+  d = d[o+1:]
+  empty = reduce(lambda acc, x: [deepcopy(acc) for _ in range(x)], d[::-1])
+  if n > 0:
+    fslide = lambda x: [deepcopy(empty) for _ in range(n)] + x[0:len(x)-n]
+  else
+    fslide = lambda x: x[n:] + [deepcopy(empty) for _ in range(len(x)-n)
+  return utl.mapd(fslide, o, field)
+  
 #(defn slide [field v]
 #  (reduce (fn [fld [n o]] (slide-1d fld n o))
 #          field
