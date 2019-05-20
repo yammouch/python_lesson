@@ -1,20 +1,4 @@
-#(ns mlp.meander-test
-#  (:require [clojure.test :refer :all]
-#            [clojure.string]
-#            [mlp.meander :refer :all]
-#            [clojure.pprint]
-#            ))
-
-#(defn format-field [field]
-#  (mapv (fn [row]
-#          (as-> row r
-#                (map #(as-> (reverse %) y
-#                            (reduce (fn [acc x] (+ (* acc 2) x)) y)
-#                            (if (= y 0) "  " (format "%02X" y)))
-#                     r)
-#                (interpose "," r)
-#                (apply str r)))
-#        field))
+import meander as dut
 
 #(defn parse-cell [cell]
 #  (as-> cell c

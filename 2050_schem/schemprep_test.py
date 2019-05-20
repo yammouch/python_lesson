@@ -1,21 +1,8 @@
+import util as utl
 import schemprep as dut
 
-def parse_cell(cell):
-  a = []
-  try:
-    n = int(cell, 16)
-  except ValueError:
-    return [0] * 6
-  for _ in range(6):
-    a.append(n % 2)
-    n = n // 2
-  return a
-
-def parse_line(s):
-  return [parse_cell(c) for c in s.split(',')]
-
 fld = \
-[parse_line(l) for l in
+[utl.parse_line(l) for l in
  ["0A,02,02,02,01,  ,  ,  ,  ,  ,  ,  ,  ,  ", # 0
   "  ,  ,  ,  ,01,  ,  ,  ,  ,  ,  ,  ,  ,  ",
   "  ,  ,  ,  ,01,  ,  ,  ,  ,  ,  ,  ,  ,  ",
@@ -45,7 +32,7 @@ pattern = \
  "......1...", "...1......", "........1.", "..........", "......1...",
  "..........", "..........", "..........", "..........", "......1...",
  "..........", "..........", "..........", "..........", ".........."]
-pattern = [[parse_cell(c) for c in l] for l in pattern]
+pattern = [[utl.parse_cell(c) for c in l] for l in pattern]
 fld, ex1, ex2, ex3, ex4 = [pattern[i::5] for i in range(5)]
 if dut.slide_1d(fld, -3, 1) == ex1:
   print('[OK]', end='')
