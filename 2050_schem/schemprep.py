@@ -48,5 +48,5 @@ def padding(rows, h, w):
   return [row + [[0]*len(rows[0][0])
                  for _ in range(w - len(rows[0]))]
           for row in rows] \
-       + reduce(lambda acc, x: deepcopy(acc, x),
+       + reduce(lambda acc, x: [deepcopy(acc)] * x,
                 [len(rows[0][0]), len(rows[0]), len(rows)], 0)
