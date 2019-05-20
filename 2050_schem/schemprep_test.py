@@ -8,10 +8,8 @@ def parse_cell(cell):
     n = n // 2
   return a
 
-#(defn parse-line [s]
-#  (mapv (fn [cell] (parse-cell (apply str (rest cell))))
-#        (re-seq #",[^,]*" (apply str (cons \, s)))
-#        ))
+def parse_line(s):
+  return [parse_cell(c) for c in s.split(',')]
 
 #(deftest room-test
 #  (let [fld (mapv parse-line
