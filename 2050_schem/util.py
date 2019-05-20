@@ -13,11 +13,11 @@ def xorshift(x, y, z, w):
     wn = 0xFFFFFFFF & (w ^ (w >> 19) ^ t ^ (t >> 8))
     x = y; y = z; z = w; w = wn
 
-def lift(l, n);
+def lift(l, n):
   while True:
     if not l:
       return n
-    elif n < l[0];
+    elif n < l[0]:
       return n
     else:
       l = l[1:]
@@ -33,7 +33,7 @@ def rand_nodup(n, lt, rs):
     accv.append(lifted)
   return accv
 
-defn select(v, ns, rs):
+def select(v, ns, rs):
   x = rand_nodup(sum(ns), len(v), rs)
   x = [v[i] for i in x]
   acc = []
@@ -43,5 +43,5 @@ defn select(v, ns, rs):
     ns = ns[1:]
   return acc
 
-defn one_hot(val, len):
+def one_hot(val, len):
   [0] * val + [1] + [0] * (len - val - 1)

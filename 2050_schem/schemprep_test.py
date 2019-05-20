@@ -2,7 +2,10 @@ import schemprep as dut
 
 def parse_cell(cell):
   a = []
-  n = int(cell, 16)
+  try:
+    n = int(cell, 16)
+  except ValueError:
+    return [0] * 6
   for _ in range(6):
     a.append(n % 2)
     n = n // 2
@@ -11,7 +14,7 @@ def parse_cell(cell):
 def parse_line(s):
   return [parse_cell(c) for c in s.split(',')]
 
-fld =
+fld = \
 [parse_line(l) for l in
  ["0A,02,02,02,01,  ,  ,  ,  ,  ,  ,  ,  ,  ", # 0
   "  ,  ,  ,  ,01,  ,  ,  ,  ,  ,  ,  ,  ,  ",
