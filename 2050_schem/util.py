@@ -2,9 +2,9 @@ import bisect
 
 def mapd(f, d, *ls):
   if d <= 0:
-    f(*ls)
+    return f(*ls)
   else:
-    [mapd(f, d-1, *x) for x in zip(*ls)]
+    return [mapd(f, d-1, *x) for x in zip(*ls)]
 
 def xorshift(x, y, z, w):
   while True:

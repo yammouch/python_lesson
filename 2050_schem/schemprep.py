@@ -28,15 +28,15 @@ def room(field):
 def slide_1d(field, n, o):
   fld = field
   d = []
-  while fld is list:
+  while isinstance(fld, list):
     d.append(len(fld))
     fld = fld[0]
   d = d[o+1:]
   empty = reduce(lambda acc, x: [deepcopy(acc) for _ in range(x)], d[::-1], 0)
   if n > 0:
-    fslide = lambda x: [deepcopy(empty) for _ in range(n)] + x[0:len(x)-n]
+    fslide = lambda x: [deepcopy(empty) for _ in range(n)] + x[0:-n]
   else:
-    fslide = lambda x: x[n:] + [deepcopy(empty) for _ in range(len(x)-n)]
+    fslide = lambda x: x[-n:] + [deepcopy(empty) for _ in range(-n)]
   return utl.mapd(fslide, o, field)
   
 def slide(field, v):
