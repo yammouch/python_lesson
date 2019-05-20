@@ -39,17 +39,14 @@ def slide_1d(field, n, o):
     fslide = lambda x: x[n:] + [deepcopy(empty) for _ in range(len(x)-n)
   return utl.mapd(fslide, o, field)
   
-def slide(field v):
+def slide(field, v):
   for n, o in zip(v, range(len(v))):
     field = slide_1d(field, n, o)
   return field
 
-#(defn padding [rows h w]
-#  (let [empty 0]
-#    (as-> (concat rows (repeat [])) rows
-#          (map (fn [row]
-#                 (as-> (repeat empty) x
-#                       (concat row x)
-#                       (take w x)))
-#               rows)
-#          (take h rows))))
+def padding(rows, h, w):
+  return [row + [[0]*len(rows[0][0])
+                 for _ in range(w - len(rows[0]))]
+          for row in rows] \
+       + reduce(lambda acc, x: deepcopy(acc, x),
+                [len(rows[0][0]), len(rows[0]), len(rows)], 0)
