@@ -1,27 +1,12 @@
-#(ns mlp.schemprep-test
-#  (:require [clojure.test :refer :all]
-#            [clojure.string]
-#            [mlp.schemprep]
-#            [clojure.pprint]
-#            ))
+import schemprep as dut
 
-#(defn format-field [field]
-#  (mapv (fn [row]
-#          (as-> row r
-#                (map #(->> (reverse %)
-#                           (reduce (fn [acc x] (+ (* acc 2) x)))
-#                           (format "%02X"))
-#                     r)
-#                (interpose " " r)
-#                (apply str r)))
-#        field))
-
-#(defn parse-cell [cell]
-#  (as-> cell c
-#        (filter (set "0123456789ABCDEFabcdef") c)
-#        (if (empty? c) 0 (Integer/parseInt (apply str c) 16))
-#        (iterate (fn [[_ q]] [(rem q 2) (quot q 2)]) [0 c])
-#        (mapv first (take 6 (rest c)))))
+def parse_cell(cell):
+  a = []
+  n = int(cell, 16)
+  for _ in range(6):
+    a.append(n % 2)
+    n = n // 2
+  return a
 
 #(defn parse-line [s]
 #  (mapv (fn [cell] (parse-cell (apply str (rest cell))))
