@@ -2,7 +2,7 @@ import meander as dut
 import util as utl
 
 exp = \
-[utl.parse_line(l) for l in
+[utl.parse_row(l) for l in
  #  0              5             10
  ["0A,02,02,02,01,  ,  ,  ,  ,  ,  ,  ,  ,  ", # 0
   "  ,  ,  ,  ,01,  ,  ,  ,  ,  ,  ,  ,  ,  ",
@@ -25,9 +25,10 @@ if dut.meander_0_0([14, 14], [4, 3, 2, 2, 3, 3]) \
 else:
   print('[ER]', end='')
 print(' meander_0_0')
+print(utl.format_field(dut.meander_0_0([14, 14], [4, 3, 2, 2, 3, 3])['field']))
 
 exp = \
-[utl.parse_line(l) for l in
+[utl.parse_row(l) for l in
  #  0              5             10
  ["0A,02,01,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ", # 0
   "  ,  ,01,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
@@ -43,7 +44,7 @@ exp = \
   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  "]]
-if dut/meander_0_1([14, 14], [4, 3, 2, 2, 3, 3]) \
+if dut.meander_0_1([14, 14], [4, 3, 2, 2, 3, 3]) \
  == {'field': exp,
      'cmd': {'cmd': 'move-y', 'org': [0, 0], 'dst': 5}}:
   print('[OK]', end='')

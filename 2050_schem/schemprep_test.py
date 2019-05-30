@@ -2,7 +2,7 @@ import util as utl
 import schemprep as dut
 
 fld = \
-[utl.parse_line(l) for l in
+[utl.parse_row(l) for l in
  ["0A,02,02,02,01,  ,  ,  ,  ,  ,  ,  ,  ,  ", # 0
   "  ,  ,  ,  ,01,  ,  ,  ,  ,  ,  ,  ,  ,  ",
   "  ,  ,  ,  ,01,  ,  ,  ,  ,  ,  ,  ,  ,  ",

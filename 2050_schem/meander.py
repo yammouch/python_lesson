@@ -29,6 +29,7 @@ def line(field, from_p, to, o):
   fld = copy.deepcopy(field)
   for y, x in range_n(from_p, to, o):
     fld[y][x][o] = 1
+  return fld
 
 def lines(field, from_p, tos):
   fld = copy.deepcopy(field)

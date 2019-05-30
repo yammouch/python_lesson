@@ -58,16 +58,16 @@ def parse_cell(cell):
     n = n // 2
   return a
 
-def parse_line(s):
+def parse_row(s):
   return [parse_cell(c) for c in s.split(',')]
 
+def format_row(row):
+  r = []
+  for c in row:
+    c = reduce(lambda acc, x: acc*2+x, c[::-1])
+    c = '  ' if c == 0 else '{:02X}'.format(c)
+    r.append(c)
+  return ','.join(r)
+
 def format_field(field):
-  fld = []
-  for row in field:
-    r = []
-    for c in row:
-      c = reduce(lambda acc, x: acc*2+x, c[::-1])
-      c = '  ' if c == 0 else '{:02X}'.format(c)
-      r.append(c)
-    fld.append(','.join(r))
-  return fld
+  return "\n".join(format_row(r) for r in field)
