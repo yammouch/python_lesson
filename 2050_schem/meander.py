@@ -1,6 +1,6 @@
 import copy
 import schemprep as smp
-import schemmlp as scp
+#import schemmlp as scp
 import util as utl
 
 def range_2d(end, from_p, to, o):
@@ -97,14 +97,14 @@ def meander_0_1(size, l):
 def meander_0(size, l):
   return [meander_0_0(size, l), meander_0_1(size, l)]
 
-def meander_pos(n):
-  m = meander_0([14, 14], [4, 2, 2, 2, 4, 2])
-  u, d, l, r = smp.room(m[0]["field"])
-  print([u, d, l, r])
-  ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
-  ml = utl.select(ml, [n], utl.xorshift(2, 4, 6, 8))
-  ml = ml[0]
-  return [scp.slide_history(m, ml) for x in ml]
+#def meander_pos(n):
+#  m = meander_0([14, 14], [4, 2, 2, 2, 4, 2])
+#  u, d, l, r = smp.room(m[0]["field"])
+#  print([u, d, l, r])
+#  ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
+#  ml = utl.select(ml, [n], utl.xorshift(2, 4, 6, 8))
+#  ml = ml[0]
+#  return [scp.slide_history(m, ml) for x in ml]
 
 #    |<-  l0  ->|
 #   _            p1
@@ -250,14 +250,14 @@ def main():
 #    ))
 #; lein run -m mlp.t0160-gentr
 
-def position_variation(m, rs):
-  u, d, l, r = smp.room(m[0]["field"])
-  ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
-  n = len(ml)
-  [mtr, mts] = utl.select(ml, [n-1, 1], rs)
-  return [[scp.slide_history(m, x) for x in ml],
- #return [[scp.slide_history(m, x) for x in mtr],
-          [scp.slide_history(m, x) for x in mts]]
+#def position_variation(m, rs):
+#  u, d, l, r = smp.room(m[0]["field"])
+#  ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
+#  n = len(ml)
+#  [mtr, mts] = utl.select(ml, [n-1, 1], rs)
+#  return [[scp.slide_history(m, x) for x in ml],
+# #return [[scp.slide_history(m, x) for x in mtr],
+#          [scp.slide_history(m, x) for x in mts]]
 
 #(defn meander-0-geometry-variation [size]
 #  (for [g0 [2]
