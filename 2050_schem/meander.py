@@ -35,6 +35,7 @@ def lines(field, from_p, tos):
   fld = copy.deepcopy(field)
   for p, o in tos:
     fld = line(fld, from_p, p, o)
+    from_p = p
   return fld
 
 def add_elements(field, els):

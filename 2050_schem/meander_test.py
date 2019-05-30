@@ -25,7 +25,6 @@ if dut.meander_0_0([14, 14], [4, 3, 2, 2, 3, 3]) \
 else:
   print('[ER]', end='')
 print(' meander_0_0')
-print(utl.format_field(dut.meander_0_0([14, 14], [4, 3, 2, 2, 3, 3])['field']))
 
 exp = \
 [utl.parse_row(l) for l in
