@@ -40,7 +40,6 @@ def lines(field, from_p, tos):
   return fld
 
 def add_elements(field, els):
-  print(els)
   fld = deepcopy(field)
   for p, d in els:
     fld[p[0]][p[1]][d] = 1
@@ -208,7 +207,7 @@ def ring_1_0(size, l):
   p0, p1, p2, p3, p4, p5, p6, p7 = ring_1_points(l)
   fld = reduce(lambda acc, x: [deepcopy(acc) for _ in range(x)],
                [6] + size[::-1], 0)
-  fld = add_elements(fld, [[p0, 3], [p5, 5], [p7, 4]])
+  fld = add_elements(fld, [[p0, 3], [p1, 5], [p7, 4]])
   fld = line(fld, p0, p1[1], 1)
   fld = lines(fld, p2, [[p3, 1], [p4, 0], [p5, 1], [p6, 0], [p7, 1]])
   cmd = {'cmd': 'move-y',
@@ -220,7 +219,7 @@ def ring_1_1(size, l):
   p0, p1, p2, p3, p4, p5, p6, p7 = ring_1_points(l)
   fld = reduce(lambda acc, x: [deepcopy(acc) for _ in range(x)],
                [6] + size[::-1], 0)
-  fld = add_elements(fld, [[p0, 3], [p5, 5], [p7, 4], [[p6[0], p3[1]], 2]])
+  fld = add_elements(fld, [[p0, 3], [p1, 5], [p7, 4], [[p6[0], p3[1]], 2]])
   fld = line(fld, p0, p1[1], 1)
   fld = lines(fld, p2, [[p3, 1], [p6, 0], [p7, 1]])
   cmd = {'cmd': 'move-x',
@@ -232,7 +231,7 @@ def ring_1_2(size, l):
   p0, p1, p2, p3, p4, p5, p6, p7 = ring_1_points(l)
   fld = reduce(lambda acc, x: [deepcopy(acc) for _ in range(x)],
                [6] + size[::-1], 0)
-  fld = add_elements(fld, [[p0, 3], [p5, 5], [p7, 4]])
+  fld = add_elements(fld, [[p0, 3], [p1, 5], [p7, 4]])
   fld = line(fld, p0, p1[1], 1)
   fld = lines(fld, p2, [[p3, 1], [[p6[0], p3[1]], 0], [p7, 1]])
   cmd = {'cmd': 'move-y',
@@ -244,15 +243,11 @@ def ring_1(size, l):
   return [ring_1_0(size, l), ring_1_1(size, l), ring_1_2(size, l)]
 
 def main():
-#  ;(doseq [sequ (ring-0 [14 14] [4 -2 -3 3 2 2])]
-  for sequ in ring_1([14, 14], [2, 2, -2, -3, 3, 2]):
-    print(sequ["field"])
-#  ;(doseq [sequ (meander-0 [14 14] [4 2 2 2 4 2])]
-#    (clojure.pprint/pprint
-#     (smp/format-field (:field sequ)))
-#    (clojure.pprint/pprint (:cmd sequ))
-#    ))
-#; lein run -m mlp.t0160-gentr
+  for sequ in meander_0([14, 14], [4, 2, 2, 2, 4, 2]):
+  #for sequ in ring_0([14, 14], [4, -2, -3, 3, 2, 2]):
+  #for sequ in ring_1([14, 14], [2, 2, -2, -3, 3, 2]):
+    print(utl.format_field(sequ["field"]))
+    print('-' * 60)
 
 #def position_variation(m, rs):
 #  u, d, l, r = smp.room(m[0]["field"])
@@ -321,3 +316,6 @@ def main():
 #    (print-data tr :cmd   "train_out.dat")
 #    (print-data ts :field "test_in.dat"  )
 #    (print-data ts :cmd   "test_out.dat" )))
+
+if __name__ == '__main__':
+  main()
