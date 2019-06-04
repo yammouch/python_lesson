@@ -6,16 +6,16 @@ def mlp_input_cmd(cmd, size):
   dst = cmd['dst']
   cy, cx = size
   cmd = cmd['cmd']
-  ([1, 0] if cmd == 'move-y' else [0. 1]) +
-  utl.one_hot(y, cy) +
-  utl.one_hot(x, cx) +
-  utl.one_hot(dst, max(cy, cx))
+  return ([1, 0] if cmd == 'move-y' else [0, 1]) + \
+         utl.one_hot(y, cy) + \
+         utl.one_hot(x, cx) + \
+         utl.one_hot(dst, max(cy, cx))
 
 def slide_pair(p, mv):
   y, x = p['cmd']['org']
   cmd = p['cmd']['cmd']
-  return {'field': smp.slide(p['field'], mv)
-          'cmd': {'cmd': cmd
+  return {'field': smp.slide(p['field'], mv),
+          'cmd': {'cmd': cmd,
                   'org': [y + mv[0], x + mv[1]],
                   'dst': cmd['dst'] + mv[0 if cmd == 'move-y' else 1]}}
 

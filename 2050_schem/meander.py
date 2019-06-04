@@ -1,7 +1,7 @@
 from copy import deepcopy
 from functools import reduce
 import schemprep as smp
-#import schemmlp as scp
+import schemmlp as scp
 import util as utl
 
 def range_2d(end, from_p, to, o):
@@ -249,35 +249,35 @@ def main():
     print(utl.format_field(sequ["field"]))
     print('-' * 60)
 
-#def position_variation(m, rs):
-#  u, d, l, r = smp.room(m[0]["field"])
-#  ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
-#  n = len(ml)
-#  [mtr, mts] = utl.select(ml, [n-1, 1], rs)
-#  return [[scp.slide_history(m, x) for x in ml],
-# #return [[scp.slide_history(m, x) for x in mtr],
-#          [scp.slide_history(m, x) for x in mts]]
+def position_variation(m, rs):
+  u, d, l, r = smp.room(m[0]["field"])
+  ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
+  n = len(ml)
+  [mtr, mts] = utl.select(ml, [n-1, 1], rs)
+  return [[scp.slide_history(m, x) for x in ml],
+ #return [[scp.slide_history(m, x) for x in mtr],
+          [scp.slide_history(m, x) for x in mts]]
 
-#(defn meander-0-geometry-variation [size]
-#  (for [g0 [2]
-#        [g1 g3] (concat (for [g1 [ 2  3  4] g3 [ 2]] [g1 g3])
-#                        (for [g1 [-2 -3 -4] g3 [-2]] [g1 g3]))
-#        g2 [2 3 4] g4 [2] g5 [2]]
-#    (mlp.meander/meander-0 size [(+ g0 g2) g1 g2 g3 g4 g5])))
+def meander_0_geometry_variation(size):
+  return [meander_0(size, [g0+g2, g1, g2, g3, g4, g5])
+          for g0 in [0]
+          for g1, g3 in ( [(g1, g3) for g1 in [ 2,  3,  4] for g3 in [ 2]] +
+                          [(g1, g3) for g1 in [-2, -3, -4] for g3 in [-2]] )
+          for g2 in [2, 3, 4] for g4 in [2] for g5 in [2]]
 
-#(defn ring-0-geometry-variation [size]
-#  (for [g0 [4]
-#        [g1 g2] (concat (for [g1 [ 4] g2 [ 2  3  4]] [g1 g2])
-#                        (for [g1 [-4] g2 [-2 -3 -4]] [g1 g2]))
-#        g3 [2 3 4] g4 [1] g5 [2]]
-#    (mlp.meander/ring-0 size [g0 g1 g2 g3 g4 g5])))
+def ring_0_geometry_variation(size):
+  return [ring_0(size, [g0, g1, g2, g3, g4, g5])
+          for g0 in [4]
+          for g1, g2 in ( [(g1, g2) for g1 in [ 4] for g2 in [ 2,  3,  4]] +
+                          [(g1, g2) for g1 in [-4] for g2 in [-2, -3, -4]] )
+          for g3 in [2, 3, 4] for g4 in [1] for g5 in [2]]
 
-#(defn ring-1-geometry-variation [size]
-#  (for [g0 [2] g1 [1]
-#        [g2 g3] (concat (for [g2 [ 2] g3 [ 2  3  4]] [g2 g3])
-#                        (for [g2 [-2] g3 [-2 -3 -4]] [g2 g3]))
-#        g4 [2 3 4] g5 [2]]
-#    (mlp.meander/ring-1 size [g0 g1 g2 g3 g4 g5])))
+def ring_1_geometry_variation(size):
+  return [ring_1(size, [g0, g1, g2, g3, g4, g5])
+          for g0 in [2] for g1 in [1]
+          for g2, g3 in ( [(g2, g3) for g2 in [ 2] for g3 in [ 2,  3,  4]] +
+                          [(g2, g3) for g2 in [-2] for g3 in [-2, -3, -4]] )
+          for g4 in [2, 3, 4] for g5 in [2]]
 
 #(defn test-pattern [size]
 #  (as-> (concat ;(meander-0-geometry-variation size)
