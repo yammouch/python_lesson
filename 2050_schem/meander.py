@@ -279,30 +279,21 @@ def ring_1_geometry_variation(size):
                           [(g2, g3) for g2 in [-2] for g3 in [-2, -3, -4]] )
           for g4 in [2, 3, 4] for g5 in [2]]
 
-#(defn test-pattern [size]
-#  (as-> (concat ;(meander-0-geometry-variation size)
-#                (ring-0-geometry-variation size)
-#                (ring-1-geometry-variation size)) s
-#        ; [h h ...]
-#        (mapv (fn [geom]
-#                (position-variation geom (utl/xorshift 2 4 6 8)))
-#              s)
-#        ; [ [[h h ...] [h h ...]]
-#        ;   [[h h ...] [h h ...]]
-#        ;   ... ]
-#
-#        (apply map vector s)
-#        ; [ [[h h ...] [h h ...] ...]
-#        ;   [[h h ...] [h h ...] ...] ]
-#        ))
+def test_pattern(size):
+  #histories = meander_0_geometry_variation(size)
+  histories = ring_0_geometry_variation(size) \
+            + ring_1_geometry_variation(size)
+  # [h h ...]
 
-#(defn print-data [l k fname]
-#  (with-open [o (clojure.java.io/writer fname)]
-#    (binding [*out* o]
-#      (doseq [x1 l]
-#        (doseq [x (k x1)]
-#          (print " " x))
-#        (newline)))))
+  pvs = [position_variation(geom, utl.xorshift(2, 4, 6, 8))
+         for geom in histories]
+  # [ [[h h ...] [h h ...]]
+  #   [[h h ...] [h h ...]]
+  #   ... ]
+
+  return list(zip(*pvs))
+  # [ [[h h ...] [h h ...] ...]
+  #   [[h h ...] [h h ...] ...] ]
 
 #(defn -main []
 #  (let [height 10, width 10
