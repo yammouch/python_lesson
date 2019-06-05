@@ -242,13 +242,6 @@ def ring_1_2(size, l):
 def ring_1(size, l):
   return [ring_1_0(size, l), ring_1_1(size, l), ring_1_2(size, l)]
 
-def main():
-  for sequ in meander_0([14, 14], [4, 2, 2, 2, 4, 2]):
-  #for sequ in ring_0([14, 14], [4, -2, -3, 3, 2, 2]):
-  #for sequ in ring_1([14, 14], [2, 2, -2, -3, 3, 2]):
-    print(utl.format_field(sequ["field"]))
-    print('-' * 60)
-
 def position_variation(m, rs):
   u, d, l, r = smp.room(m[0]["field"])
   ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
@@ -307,6 +300,19 @@ def test_pattern(size):
 #    (print-data tr :cmd   "train_out.dat")
 #    (print-data ts :field "test_in.dat"  )
 #    (print-data ts :cmd   "test_out.dat" )))
+
+def main():
+  for sequ in meander_0([14, 14], [4, 2, 2, 2, 4, 2]):
+  #for sequ in ring_0([14, 14], [4, -2, -3, 3, 2, 2]):
+  #for sequ in ring_1([14, 14], [2, 2, -2, -3, 3, 2]):
+    print(utl.format_field(sequ["field"]))
+    print('-' * 60)
+  p = test_pattern([14, 14])
+  print(len(p))
+  print(len(p[0]))
+  print(len(p[0][0]))
+  print(len(p[0][0][0]))
+
 
 if __name__ == '__main__':
   main()
