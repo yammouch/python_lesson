@@ -27,9 +27,9 @@ def lift(l, n):
 def rand_nodup(n, lt, rs):
   acc  = []
   accv = []
-  l = [x % rs for x in range(lt, lt-n, -1)]
-  while l:
-    lifted = lift(acc, l[0])
+  l = [r % x for r, x in zip(rs, range(lt, lt-n, -1))]
+  for x in l:
+    lifted = lift(acc, x)
     bisect.insort(acc, lifted)
     accv.append(lifted)
   return accv
