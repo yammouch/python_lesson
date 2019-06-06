@@ -13,9 +13,9 @@ def mlp_input_cmd(cmd, size):
 
 def slide_pair(p, mv):
   y, x = p['cmd']['org']
-  cmd = p['cmd']['cmd']
+  cmd = p['cmd']
   return {'field': smp.slide(p['field'], mv),
-          'cmd': {'cmd': cmd,
+          'cmd': {'cmd': cmd['cmd'],
                   'org': [y + mv[0], x + mv[1]],
                   'dst': cmd['dst'] + mv[0 if cmd == 'move-y' else 1]}}
 
