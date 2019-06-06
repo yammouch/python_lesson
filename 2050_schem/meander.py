@@ -246,7 +246,7 @@ def position_variation(m, rs):
   u, d, l, r = smp.room(m[0]["field"])
   ml = [[dy, dx] for dy in range(-u, d+1) for dx in range(-l, r+1)]
   n = len(ml)
-  [mtr, mts] = utl.select(ml, [n-1, 1], rs)
+  mtr, mts = utl.select(ml, [n-1, 1], rs)
   return [[scp.slide_history(m, x) for x in ml],
  #return [[scp.slide_history(m, x) for x in mtr],
           [scp.slide_history(m, x) for x in mts]]

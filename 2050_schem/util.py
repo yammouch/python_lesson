@@ -39,7 +39,7 @@ def select(v, ns, rs):
   x = [v[i] for i in x]
   acc = []
   while ns:
-    acc.append(ns[0])
+    acc.append(x[:ns[0]])
     x = x[ns[0]:]
     ns = ns[1:]
   return acc
