@@ -29,24 +29,37 @@ def dist(g):
 
   return retval
 
-def htruck_range(us, ls):
+def htruck_range(us, ds):
   retval = {}
-  for i, pair in enumerate(zip(us, ls)):
+  for i, pair in enumerate(zip(us, ds)):
     for x in pair:
       if x in retval:
         retval[x][1] = i
       else:
         retval[x] = [i, None]
+  if None in retval:
+    del retval[None]
   return retval
 
-def make_vconst(us, ls):
+def make_vconst(us, ds):
   retval = {}
-  for u, l in zip(us, ls):
+  for u, d in zip(us, ds):
     if u in retval:
-      retval[u].append(l)
+      retval[u].append(d)
     else:
-      retval[u] = [l]
+      retval[u] = [d]
+  if None in retval:
+    del retval[None]
   return retval
+
+def make_cols(us, ds):
+  cols = [set() for _ in range(len(us))]
+  acc = {}
+  hr = htruck_range(us, ds)
+  for net in hr:
+    for i in range(hr[net][0], hr[net][1]+1):
+      cols[i].add(net)
+  return cols
 
 def main():
   g = { 'a': ['b', 'c']
@@ -60,6 +73,7 @@ def main():
   #print(htruck_range([None, 1, 2, 3], [3, 2, None, 1]))
   print(htruck_range(*ex1))
   print(make_vconst(*ex1))
+  print(make_cols(*ex1))
 
 if __name__ == '__main__':
   main()
