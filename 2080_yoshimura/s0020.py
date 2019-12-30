@@ -54,12 +54,23 @@ def make_vconst(us, ds):
 
 def make_cols(us, ds):
   cols = [set() for _ in range(len(us))]
-  acc = {}
   hr = htruck_range(us, ds)
   for net in hr:
     for i in range(hr[net][0], hr[net][1]+1):
       cols[i].add(net)
   return cols
+
+def make_zones(us, ds):
+  acc = []
+  maxset = set()
+  for s in make_cols(us, ds):
+    if maxset <= s:
+      maxset = s
+    elif not maxset >= s:
+      acc.append(maxset)
+      maxset = s
+  acc.append(maxset)
+  return acc
 
 def main():
   g = { 'a': ['b', 'c']
@@ -74,6 +85,7 @@ def main():
   print(htruck_range(*ex1))
   print(make_vconst(*ex1))
   print(make_cols(*ex1))
+  print(make_zones(*ex1))
 
 if __name__ == '__main__':
   main()
