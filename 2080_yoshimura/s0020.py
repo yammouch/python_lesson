@@ -86,6 +86,9 @@ def main():
   print(make_vconst(*ex1))
   print(make_cols(*ex1))
   print(make_zones(*ex1))
+  ex2 = ( [None, 1, 4, 5, 1, 6, 7, None, 4, 9, 10, 10]
+        , [   2, 3, 5, 3, 5, 2, 6,    8, 9, 8,  7,  9] )
+  print(make_zones(*ex2))
 
 if __name__ == '__main__':
   main()
