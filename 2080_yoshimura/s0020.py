@@ -72,6 +72,11 @@ def make_zones(us, ds):
   acc.append(maxset)
   return acc
 
+def merge_candidate(i, zones):
+  l = set().union(*zones[0:i])
+  r = set().union(*zones[i:])
+  return [l - r, r - l]
+
 def main():
   g = { 'a': ['b', 'c']
       , 'b': ['c'     ]
@@ -88,7 +93,11 @@ def main():
   print(make_zones(*ex1))
   ex2 = ( [None, 1, 4, 5, 1, 6, 7, None, 4, 9, 10, 10]
         , [   2, 3, 5, 3, 5, 2, 6,    8, 9, 8,  7,  9] )
-  print(make_zones(*ex2))
+  zones = make_zones(*ex2)
+  print(zones)
+  for i in range(1, len(zones)):
+    print('i: ', i, end=' ')
+    print(merge_candidate(i, zones))
 
 if __name__ == '__main__':
   main()
