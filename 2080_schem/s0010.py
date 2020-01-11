@@ -26,8 +26,6 @@ def net(pxg, pad, n, lo, ofs=(0, 0), transpose=False):
   return e
 
 def nets_to_svg(pxg, pad, nets, ofs=(0, 0), transpose=False):
-  #size = [ max(n[0] for n in nets) + 1 + ofs[0]
-  #       , max(max(n[1] + n[2]) for n in nets) + ofs[1] ]
   size = [ max(n[0] for n in nets) + 1
          , max(max(n[1] + n[2]) for n in nets) ]
   # width and height should be specified outside of this function.
@@ -39,12 +37,7 @@ def nets_to_svg(pxg, pad, nets, ofs=(0, 0), transpose=False):
     s = ET.Element('svg',
      {'width' : str(pad*2 + (size[1]+ofs[1])*pxg),
       'height': str(pad*2 + (size[0]+ofs[0])*pxg) })
-  #s = ET.Element('svg',
-  # {'width' : str(pad*2 + size[0 if transpose else 1]*pxg),
-  #  'height': str(pad*2 + size[1 if transpose else 0]*pxg) })
   for n in nets:
-    #s.append(net(pxg, pad, n, size[1]-1, ofs=ofs, transpose=transpose))
-    #s.append(net(pxg, pad, n, size[0]-1, ofs=ofs, transpose=transpose))
     s.append(net(pxg, pad, n, size[0], ofs=ofs, transpose=transpose))
   return s
 
@@ -77,3 +70,8 @@ def gates_to_nets(gates1, gates2):
         retval[g[1]] = [[], []]
       retval[g[1]][1].append(i*grid_per_lgrid+2)
   return [[i+1] + retval[x] for i, x in enumerate(retval)]
+
+def gate2_to_svg(pxg, pad, gates1, gates2, ofs=(0, 0)):
+  return nets_to_svg \
+  ( pxg, pad, gates_to_nets(gates1, gates2)
+  , ofs=(0, 0), transpose=True )
