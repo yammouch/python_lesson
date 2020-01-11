@@ -33,3 +33,32 @@ def nets_to_svg(pxg, pad, nets, transpose=False):
     s.append(net(pxg, pad, n, size[1]-1, transpose=transpose))
   return s
 
+def gates_to_nets(gates1, gates2):
+  grid_per_lgrid = 4
+  retval = {}
+  for i, g in enumerate(gates1):
+    if g[0] == 'and':
+      if g[3] not in retval:
+        retval[g[3]] = [[], []]
+      retval[g[3]][1].append[i*grid_per_lgrid+2]
+    elif g[0] == 'not':
+      if g[2] not in retval:
+        retval[g[2]] = [[], []]
+      retval[g[2]][1].append[i*grid_per_lgrid+2]
+  for i, g in enumerate(gates2):
+    if g[0] == 'and':
+      if g[1] not in retval:
+        retval[g[1]] = [[], []]
+      if g[2] not in retval:
+        retval[g[2]] = [[], []]
+      retval[g[1]][2].append[i*grid_per_lgrid+1]
+      retval[g[2]][2].append[i*grid_per_lgrid+3]
+    elif g[0] == 'not':
+      if g[1] not in retval:
+        retval[g[1]] = [[], []]
+      retval[g[1]][2].append[i*grid_per_lgrid+2]
+    elif g[0] == 'out':
+      if g[1] not in retval:
+        retval[g[1]] = [[], []]
+      retval[g[1]][2].append[i*grid_per_lgrid+2]
+  return [[i] + retval[x] for i, x in enumerate(retval)]

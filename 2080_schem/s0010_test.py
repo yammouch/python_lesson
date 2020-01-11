@@ -1,6 +1,7 @@
 import s0010 as dut
 import sys
 import xml.etree.ElementTree as ET
+import yaml
 
 def make_tr(row):
   pxg = 13
@@ -37,6 +38,10 @@ def main():
   b.append(body())
 
   ET.ElementTree(t).write('{}.html'.format(progname), method='html')
+
+  with open('s0010.yml') as f:
+    ed = yaml.load(f)
+  print(dut.gates_to_nets(ed[0], ed[1]))
 
 if __name__ == '__main__':
   main()
