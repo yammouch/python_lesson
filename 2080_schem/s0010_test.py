@@ -8,6 +8,9 @@ def make_tr(row):
   tr = ET.Element('tr')
   for cell in row:
     td = ET.Element('td')
+    td.append(dut.nets_to_svg(pxg, pad, cell, transpose=True))
+    tr.append(td)
+    td = ET.Element('td')
     td.append(dut.nets_to_svg(pxg, pad, cell))
     tr.append(td)
   return tr
